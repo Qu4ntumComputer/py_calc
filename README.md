@@ -14,6 +14,6 @@ pip install sympy rich
 
 run the .exe file with your console!
 
-Cmd commands
-## cd "path/to/the/exe/file"
-## calc.exe
+## Cmd commands
+1. cd "path/to/the/exe/file"
+2. calc.exe
