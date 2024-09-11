@@ -276,7 +276,7 @@ def main():
     
     t1 = text.append("\n\n----------------------------------------------------\n", style="bold red")
     t_space = text.append("                   ")
-    t2 = text.append("0. Exit\n\n", style="bold 2 red")
+    t2 = text.append("0. Exit\n\n", style="bold red")
 
     t3 = text.append("[1.]", style="blue")
     text.append(" Addition               ", style="green")
