@@ -29,7 +29,6 @@ def format_exponents(expression):
 def integral_calc():
     x = sp.symbols('x')
 
-    COLOR = "yellow"
 
     YELLOW = "\033[33m"
     RESET = "\033[0m"
@@ -54,7 +53,7 @@ def integral_calc():
         print(f"\nThe undefined integral of f(x) = {formatted_original} is:\n")
         print(f"f(x) = {integral_syntax} + c\n\n")
     except Exception as e:
-        print(f"Error while calculating: {e}")
+        console.print(f"Error while calculating: {e}", style="red")
     
     return main()
 
@@ -65,7 +64,7 @@ def addition():
         Sum = num1 + num2
         console.print(f'\n\nThe result is: {Sum}\n\n', style="yellow")
     except ValueError:
-        print("Invalid input, try again.")
+        console.print("Invalid input, try again.", style="red")
     
     return main()
 
@@ -76,7 +75,7 @@ def subtraction():
         Diff = num1 - num2
         console.print(f'\n\nThe result is: {Diff}\n\n', style="yellow")
     except ValueError:
-        print("Invalid input, try again.")
+        console.print("Invalid input, try again.", style="red")
     
     return main()
 
@@ -88,7 +87,7 @@ def multiply():
         formatted_result = replace_multiplication_symbol(f"{produkt}")
         console.print(f'\n\nThe result is: {formatted_result}\n\n', style="yellow")
     except ValueError:
-        print("Invalid input, try again.")
+        console.print("Invalid input, try again.", style="red")
     
     return main()
 
@@ -97,12 +96,12 @@ def division():
         num1 = float(input("\nDividend: "))
         num2 = float(input("Divisor: "))
         if num2 == 0:
-            print("\nUndefined (Error 0 division)\n")
+            console.print("\nUndefined (Error 0 division)\n", style="red")
         else:
             quotient = num1 / num2
             console.print(f'\n\nThe result is: {quotient}\n\n', style="yellow")
     except ValueError:
-        print("Invalid input, try again.")
+        console.print("Invalid input, try again.", style="red")
     
     return main()
 
@@ -112,7 +111,7 @@ def sqrt():
         squareroot = math.sqrt(num1)
         console.print(f'\n\nThe result is: {squareroot}\n\n', style="yellow")
     except ValueError:
-        print("Invalid input, try again.")
+        console.print("Invalid input, try again.", style="red")
     
     return main()
 
@@ -129,7 +128,7 @@ def exponent():
             formatted_result = f"{base}^{expo} = {result}"
         console.print(f'\n\nThe result of {formatted_result}\n\n', style="yellow")
     except ValueError:
-        print("Invalid input. Use numerical values.")
+        console.print("Invalid input, try again.", style="red")
     
     return main()
 
@@ -145,14 +144,14 @@ def logarithm():
         if base <= 0:
             console.print("Error, the base of a logarithm can't be equal or less than 0.", style="red")
         if base == 1:
-            console.print("Error, the base of a logarithm can't be equal to 1.")
+            console.print("Error, the base of a logarithm can't be equal to 1.", style="red")
 
         result = math.log(value, base)
 
         console.print(f'\nThe result is: {result}', style="yellow")
 
     except ValueError:
-        print("Invalid input. Use numerical values.")
+        console.print("Invalid input, try again.", style="red")
 
     return main()
 
@@ -161,7 +160,7 @@ def factorial():
         value = int(input("\n\nFactorial Value: "))
 
         if value < 0:
-            return "Faktorial ist für negative Zahlen nicht definiert."
+            return "Factorials are not defined for negative values."
         result = 1
         for i in range(2, value + 1):
             result *= i
@@ -170,7 +169,7 @@ def factorial():
 
 
     except ValueError:
-        print("Error, this function only accepts integer values. You will have to use the gamma function [11.] for non-integer factorials.")
+        console.print("Error, this function only accepts integer values. Use gamma function for non-integer factorials.", style="red")
 
     return main()
 
@@ -182,7 +181,7 @@ def matrix():
             print("")
 
             if m != n:
-                print("\nThe inverse of your matrix does not exist. A matrix must be quadratic to have an inverse.")
+                console.print("\nThe inverse of your matrix does not exist. A matrix must be quadratic to have an inverse.", style="red")
                 return None
 
             matrix = []
@@ -190,7 +189,7 @@ def matrix():
             for i in range(m):
                 zeile = list(map(float, input(f"Enter the elements of the {i+1}. line of your matrix with a space between each value: ").split()))
                 if len(zeile) != n:
-                    print("\nError, wrong amount of lines. Try again.")
+                    console.print("\nError, wrong amount of lines. Try again.", style="red")
                     return None
                 matrix.append(zeile)
 
@@ -230,7 +229,7 @@ def matrix():
                 format_matrix(inverse)
 
     except ValueError:
-        print("Error, input values must be of the datatype 'float', try again")
+        console.print("Error, input values must be of the datatype 'float', try again", style="red")
 
 
     return main()
@@ -257,7 +256,7 @@ def gamma_function():
             result = factorial_of_float(float_value, precision)
             console.print(f"\nThe factorial of {float_value} is: {result}", style="yellow")
         except ValueError as e:
-            print(f"Error: {e}")
+            console.print(f"Error: {e}", style="bold red")
 
 
     faculty()
@@ -287,7 +286,7 @@ def main():
     t4 = text.append("[2.]", style="blue")
     text.append(" Subtraction            ", style="green")
     text.append("[9.]", style="blue")
-    text.append(" Matrix\n", style="green")
+    text.append(" Inverse Matrix\n", style="green")
 
     t5 = text.append("[3.]", style="blue")
     text.append(" Multiplication        ", style="green")
@@ -321,7 +320,7 @@ def main():
     try:
         operation = int(input("Select an Operation: "))
     except ValueError:
-        print("Invalid input. Choose a number from the listet operations above.")
+        console.print("\nInvalid input. Choose a number from the listet operations above.", style="red")
         return main()
 
     if operation == 0:
