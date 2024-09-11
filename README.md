@@ -1,5 +1,4 @@
-Python Requirements:
-
+## Python Requirements
 python version 3.11.4+
 
 Libs:
@@ -9,7 +8,7 @@ re
 math
 rich
 
-Prompt to install missing libs:
+## Prompt to install
 pip install sympy rich 
 
 run the .exe file with your console!
