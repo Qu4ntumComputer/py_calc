@@ -1,3 +1,6 @@
+# CURRENTLY UPDATING.... WILL BE FINISHED IN A DAY OR TWO.
+
+
 import sys
 import sympy as sp
 import re
@@ -6,6 +9,7 @@ from rich.console import Console
 from rich.text import Text
 import numpy as np
 from mpmath import mp
+import time
 
 
 console = Console()
@@ -30,11 +34,8 @@ def integral_calc():
     x = sp.symbols('x')
 
 
-    YELLOW = "\033[33m"
-    RESET = "\033[0m"
-
-    print(f"{YELLOW}Input example: {RESET} f(x) = 3x² + 4x")
-    console.print("You can also use a ^ sign to symbolize exponents.\n", style="yellow")
+    console.print(f"Input example:  f(x) = 3x² + 4x", style="yellow1")
+    console.print("You can also use a ^ sign to symbolize exponents.\n", style="yellow1")
 
     original_function = input("f(x) = ")
 
@@ -53,82 +54,104 @@ def integral_calc():
         print(f"\nThe undefined integral of f(x) = {formatted_original} is:\n")
         print(f"f(x) = {integral_syntax} + c\n\n")
     except Exception as e:
-        console.print(f"Error while calculating: {e}", style="red")
+        console.print(f"Error while calculating: {e}", style="red1")
     
     return main()
 
 def addition():
     try:
-        num1 = float(input("\nFirst Summand: "))
-        num2 = float(input("Second Summand: "))
+
+        console.print("\n>> First Summand: ", style="magenta3", end="")
+        num1 = float(input())
+
+        console.print("\n>> Second Summand: ", style="magenta3", end="")
+        num2 = float(input())
+
         Sum = num1 + num2
-        console.print(f'\n\nThe result is: {Sum}\n\n', style="yellow")
+        console.print(f'\n\nThe result is: {Sum}\n\n', style="yellow1")
     except ValueError:
-        console.print("Invalid input, try again.", style="red")
+        console.print("Invalid input, try again.", style="red1")
     
     return main()
 
 def subtraction():
     try:
-        num1 = float(input("\nMinuend: "))
-        num2 = float(input("Subtrahend: "))
+        console.print("\n>> Minuend: ", style="yellow1", end="")
+        num1 = float(input())
+
+        console.print("\n>> Subtrahend: ", style="yellow1", end="")
+        num2 = float(input())
+
         Diff = num1 - num2
-        console.print(f'\n\nThe result is: {Diff}\n\n', style="yellow")
+        console.print(f'\n\nThe result is: {Diff}\n\n', style="yellow1")
     except ValueError:
-        console.print("Invalid input, try again.", style="red")
+        console.print("Invalid input, try again.", style="red1")
     
     return main()
 
 def multiply():
     try:
-        num1 = float(input("\nFirst Factor: "))
-        num2 = float(input("Second Factor: "))
+        console.print("\n>> First Factor: ", style="magenta3", end="")
+        num1 = float(input())
+
+        console.print("\n>> Second Factor: ", style="magenta3", end="")
+        num2 = float(input())
+
         produkt = num1 * num2
         formatted_result = replace_multiplication_symbol(f"{produkt}")
-        console.print(f'\n\nThe result is: {formatted_result}\n\n', style="yellow")
+        console.print(f'\n\nThe result is: {formatted_result}\n\n', style="yellow1")
     except ValueError:
-        console.print("Invalid input, try again.", style="red")
+        console.print("Invalid input, try again.", style="red1")
     
     return main()
 
 def division():
     try:
-        num1 = float(input("\nDividend: "))
-        num2 = float(input("Divisor: "))
+        console.print("\n>> Dividend: ", style="magenta3", end="")
+        num1 = float(input())
+
+        console.print("\n>> Divisor: ", style="magenta3", end="")
+        num2 = float(input())
         if num2 == 0:
-            console.print("\nUndefined (Error 0 division)\n", style="red")
+            console.print("\nUndefined (Error 0 division)\n", style="red1")
         else:
             quotient = num1 / num2
-            console.print(f'\n\nThe result is: {quotient}\n\n', style="yellow")
+            console.print(f'\n\nThe result is: {quotient}\n\n', style="yellow1")
     except ValueError:
-        console.print("Invalid input, try again.", style="red")
+        console.print("Invalid input, try again.", style="red1")
     
     return main()
 
 def sqrt():
     try:
-        num1 = float(input("\nEnter a number: "))
+        console.print("\n>> Value: ", style="magenta3", end="")
+        num1 = float(input())
+
         squareroot = math.sqrt(num1)
-        console.print(f'\n\nThe result is: {squareroot}\n\n', style="yellow")
+        console.print(f'\n\nThe result is: {squareroot}\n\n', style="yellow1")
     except ValueError:
-        console.print("Invalid input, try again.", style="red")
+        console.print("Invalid input, try again.", style="red1")
     
     return main()
 
 def exponent():
     try:
 
-        base = float(input("\nBase: "))
-        expo = float(input("Exponent: "))
+        console.print("\n>> Base: ", style="magenta3", end="")
+        base = float(input())
+
+        console.print("\n>> Exponent: ", style="magenta3", end="")
+        expo = float(input()) 
+
         result = base ** expo
         
         if expo.is_integer():
             formatted_result = f"{base}{to_superscript(int(expo))} is {result}"
         else:
             formatted_result = f"{base}^{expo} = {result}"
-        console.print(f'\n\nThe result of {formatted_result}\n\n', style="yellow")
+        console.print(f'\n\nThe result of {formatted_result}\n\n', style="yellow1")
     except ValueError:
-        console.print("Invalid input, try again.", style="red")
+        console.print("Invalid input, try again.", style="red1")
     
     return main()
 
@@ -136,40 +159,45 @@ def exponent():
 def logarithm():
     try:
 
-        value = float(input("\n\nValue: "))
-        base = float(input("Base: "))
+        console.print("\n>> Value: ", style="magenta3", end="")
+        value = float(input())
+
+        console.print("\n>> Base: ", style="magenta3", end="")
+        base = float(input())
 
         if value <= 0:
-            console.print("Error, logarithm of negative numbers or 0 is not defined.", style="red")
+            console.print("Error, logarithm of negative numbers or 0 is not defined.", style="red1")
         if base <= 0:
-            console.print("Error, the base of a logarithm can't be equal or less than 0.", style="red")
+            console.print("Error, the base of a logarithm can't be equal or less than 0.", style="red1")
         if base == 1:
-            console.print("Error, the base of a logarithm can't be equal to 1.", style="red")
+            console.print("Error, the base of a logarithm can't be equal to 1.", style="red1")
 
         result = math.log(value, base)
 
-        console.print(f'\nThe result is: {result}', style="yellow")
+        console.print(f'\nThe result is: {result}', style="yellow1")
 
     except ValueError:
-        console.print("Invalid input, try again.", style="red")
+        console.print("Invalid input, try again.", style="red1")
 
     return main()
 
 def factorial():
     try:
-        value = int(input("\n\nFactorial Value: "))
+        console.print("\n>> Value: ", style="magenta3", end="")
+        value = int(input())
 
         if value < 0:
-            return "Factorials are not defined for negative values."
+            console.print("Factorials aren't defined for negatives numbers.", style="red1")
+            return factorial()
         result = 1
         for i in range(2, value + 1):
             result *= i
         
-        console.print(f'\n\nThe result is: {result}', style="yellow")
+        console.print(f'\n\nThe result is: {result}', style="yellow1")
 
 
     except ValueError:
-        console.print("Error, this function only accepts integer values. Use gamma function for non-integer factorials.", style="red")
+        console.print("Error, this function only accepts integer values. Use gamma function for non-integer factorials.", style="red1")
 
     return main()
 
@@ -252,7 +280,7 @@ def gamma_function():
     def faculty():
         try:
             float_value = float(input("\n\nEnter a float value: "))
-            precision = int(input("\nEnter how many decimals points you would like to know: "))
+            precision = int(input("Enter how many decimals points you would like to know: "))
             result = factorial_of_float(float_value, precision)
             console.print(f"\nThe factorial of {float_value} is: {result}", style="yellow")
         except ValueError as e:
@@ -263,89 +291,159 @@ def gamma_function():
     
     return main()
 
+def help_list():
+
+    console.clear()
+
+    def typewriter_effect(text, delay=0.025):
+        for char in text:
+            console.print(char, style="yellow", end="")
+            sys.stdout.flush()
+            time.sleep(delay)
+
+    text = """
+    » [1.] How to use constants like π or e
+    » [2.] bla bla bla
+
+    """
+
+    constants = """
+    bla bla bla
+    bla bla bla
+    """
+
+
+    console.print("\n----------------------------------------------------", style="purple")
+    typewriter_effect(f'\n{text}\n', 0.01)
+    console.print("----------------------------------------------------", style="purple")
+
+
+    console.print("\n>> Enter option: ", style="yellow1", end="")
+    choice = int(input())
+
+    if choice == 0:
+        main()
+    elif choice == 1:
+        def typewriter_effect(text, delay=0.025):
+            for char in text:
+                console.print(char, style="yellow", end="")
+                sys.stdout.flush()
+                time.sleep(delay)
+                
+
+        console.clear()
+
+        console.print("\n----------------------------------------------------", style="purple")
+        typewriter_effect(f'\n{constants}\n', 0.01)
+        console.print("\n----------------------------------------------------", style="purple")
+
+        console.print("Type 'Ok' to go back: ", style="dodger_blue1", end="")
+        answer = input()
+
+        if answer == "ok" or answer == "Ok":
+            console.clear()
+            main()
+        else:
+            console.print("Sorry, did you mean to type 'ok'? (y/n)", style="dodger_blue1")
+            answer_typo = str(input(""))
+            if answer_typo == "y":
+                console.clear()
+                main()
+            else:
+                console.print("fuck you", style="yellow")
+
+    else:
+        console.print("\nError: Invalid input. Try again.", style="red")
+        return help_list()
+        
 
 
 
 
 def exit():
-    console.print("\nProcess terminated.\n\n", style="red")
+    console.clear()
+    console.print("\nProcess terminated.", style="red")
     sys.exit()
+
 
 def main():
     text = Text()
     
-    t1 = text.append("\n\n----------------------------------------------------\n", style="bold red")
-    t_space = text.append("                   ")
-    t2 = text.append("0. Exit\n\n", style="bold red")
+    text.append("\n\n----------------------------------------------------\n", style="red1")
+    text.append("                   ")
+    text.append("0. Exit\n\n", style="red1")
 
-    t3 = text.append("[1.]", style="blue")
-    text.append(" Addition               ", style="green")
-    text.append("[8.]", style="blue")
-    text.append(" Logarithm\n", style="green")
+    text.append("[01.]", style="blue1")
+    text.append(" Addition              ", style="green1")
+    text.append("[08.]", style="blue1")
+    text.append(" Logarithm\n", style="green1")
 
-    t4 = text.append("[2.]", style="blue")
-    text.append(" Subtraction            ", style="green")
-    text.append("[9.]", style="blue")
-    text.append(" Inverse Matrix\n", style="green")
+    text.append("[02.]", style="blue1")
+    text.append(" Subtraction           ", style="green1")
+    text.append("[09.]", style="blue1")
+    text.append(" Inverse Matrix\n", style="green1")
 
-    t5 = text.append("[3.]", style="blue")
-    text.append(" Multiplication        ", style="green")
-    text.append("[10.]", style="blue")
-    text.append(" Factorial\n", style="green")
+    text.append("[03.]", style="blue1")
+    text.append(" Multiplication        ", style="green1")
+    text.append("[10.]", style="blue1")
+    text.append(" Factorial\n", style="green1")
 
-    t6 = text.append("[4.]", style="blue")
-    text.append(" Division              ", style="green")
-    text.append("[11.]", style="blue")
-    text.append(" Gamma function\n", style="green")
+    text.append("[04.]", style="blue1")
+    text.append(" Division              ", style="green1")
+    text.append("[11.]", style="blue1")
+    text.append(" Gamma function\n", style="green1")
 
-    t7 = text.append("[5.]", style="blue")
-    text.append(" Exponent              ", style="green")
-    text.append("[12.]", style="blue")
-    text.append(" ??\n", style="green")
+    text.append("[05.]", style="blue1")
+    text.append(" Exponent              ", style="green1")
+    text.append("[12.]", style="blue1")
+    text.append(" ??\n", style="green1")
 
-    t8 = text.append("[6.]", style="blue")
-    text.append(" Squareroot            ", style="green")
-    text.append("[13.]", style="blue")
-    text.append(" ??\n", style="green")
+    text.append("[06.]", style="blue1")
+    text.append(" Squareroot            ", style="green1")
+    text.append("[13.]", style="blue1")
+    text.append(" ??\n", style="green1")
 
-    t9 = text.append("[7.]", style="blue")
-    text.append(" undefined Integrals", style="green")
-    text.append("   [14.]", style="blue")
-    text.append(" ??\n", style="green")
+    text.append("[07.]", style="blue1")
+    text.append(" undefined Integrals", style="green1")
+    text.append("   [14.]", style="blue1")
+    text.append(" ??\n", style="green1")
+    text.append("\n               Type !h for help.", style="yellow1")
 
-    t10 = text.append("\n----------------------------------------------------\n", style="bold red")
+    text.append("\n----------------------------------------------------\n", style="red1")
 
     console.print(text)
 
-    try:
-        operation = int(input("Select an Operation: "))
-    except ValueError:
-        console.print("\nInvalid input. Choose a number from the listet operations above.", style="red")
-        return main()
 
-    if operation == 0:
+    console.print(">> Select an Operation: ", style="yellow1", end="")
+    operation = input()
+
+
+    if operation == "0":
         exit()
-    elif operation == 1:
+    elif operation == "!h":
+        help_list()
+
+    elif operation == "1":
         addition()
-    elif operation == 2:
+    elif operation == "2":
         subtraction()
-    elif operation == 3:
+    elif operation == "3":
         multiply()
-    elif operation == 4:
+    elif operation == "4":
         division()
-    elif operation == 5:
+    elif operation == "5":
         exponent()
-    elif operation == 6:
+    elif operation == "6":
         sqrt()
-    elif operation == 7:
+    elif operation == "7":
         integral_calc()
-    elif operation == 8:
+    elif operation == "8":
         logarithm()
-    elif operation == 9:
+    elif operation == "9":
         matrix()
-    elif operation == 10:
+    elif operation == "10":
         factorial()
-    elif operation == 11:
+    elif operation == "11":
         gamma_function()
     else:
         console.print("\nError: Invalid Operation", style="red")
