@@ -7,7 +7,6 @@ from rich.text import Text
 import numpy as np
 from mpmath import mp
 import time
-import curses
 
 
 console = Console()
