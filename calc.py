@@ -1,6 +1,3 @@
-# CURRENTLY UPDATING.... WILL BE FINISHED IN A DAY OR TWO.
-
-
 import sys
 import sympy as sp
 import re
@@ -10,6 +7,7 @@ from rich.text import Text
 import numpy as np
 from mpmath import mp
 import time
+import curses
 
 
 console = Console()
@@ -29,6 +27,7 @@ def replace_multiplication_symbol(expression):
 
 def format_exponents(expression):
     return re.sub(r'\^(\d+)', lambda match: to_superscript(match.group(1)), expression)
+
 
 def integral_calc():
     x = sp.symbols('x')
@@ -60,15 +59,14 @@ def integral_calc():
 
 def addition():
     try:
-
-        console.print("\n>> First Summand: ", style="magenta3", end="")
+        console.print("\n> First Summand: ", style="magenta3", end="")
         num1 = float(input())
 
-        console.print("\n>> Second Summand: ", style="magenta3", end="")
+        console.print("> Second Summand: ", style="magenta3", end="")
         num2 = float(input())
 
-        Sum = num1 + num2
-        console.print(f'\n\nThe result is: {Sum}\n\n', style="yellow1")
+        sum = num1 + num2
+        console.print(f'\n\nThe result is: {sum}\n\n', style="yellow1")
     except ValueError:
         console.print("Invalid input, try again.", style="red1")
     
@@ -76,10 +74,10 @@ def addition():
 
 def subtraction():
     try:
-        console.print("\n>> Minuend: ", style="yellow1", end="")
+        console.print("\n> Minuend: ", style="magenta3", end="")
         num1 = float(input())
 
-        console.print("\n>> Subtrahend: ", style="yellow1", end="")
+        console.print("> Subtrahend: ", style="magenta3", end="")
         num2 = float(input())
 
         Diff = num1 - num2
@@ -91,10 +89,10 @@ def subtraction():
 
 def multiply():
     try:
-        console.print("\n>> First Factor: ", style="magenta3", end="")
+        console.print("\n> First Factor: ", style="magenta3", end="")
         num1 = float(input())
 
-        console.print("\n>> Second Factor: ", style="magenta3", end="")
+        console.print("> Second Factor: ", style="magenta3", end="")
         num2 = float(input())
 
         produkt = num1 * num2
@@ -107,10 +105,10 @@ def multiply():
 
 def division():
     try:
-        console.print("\n>> Dividend: ", style="magenta3", end="")
+        console.print("\n> Dividend: ", style="magenta3", end="")
         num1 = float(input())
 
-        console.print("\n>> Divisor: ", style="magenta3", end="")
+        console.print("> Divisor: ", style="magenta3", end="")
         num2 = float(input())
         if num2 == 0:
             console.print("\nUndefined (Error 0 division)\n", style="red1")
@@ -124,7 +122,7 @@ def division():
 
 def sqrt():
     try:
-        console.print("\n>> Value: ", style="magenta3", end="")
+        console.print("\n> Value: ", style="magenta3", end="")
         num1 = float(input())
 
         squareroot = math.sqrt(num1)
@@ -137,10 +135,10 @@ def sqrt():
 def exponent():
     try:
 
-        console.print("\n>> Base: ", style="magenta3", end="")
+        console.print("\n> Base: ", style="magenta3", end="")
         base = float(input())
 
-        console.print("\n>> Exponent: ", style="magenta3", end="")
+        console.print("\n> Exponent: ", style="magenta3", end="")
         expo = float(input()) 
 
         result = base ** expo
@@ -159,10 +157,10 @@ def exponent():
 def logarithm():
     try:
 
-        console.print("\n>> Value: ", style="magenta3", end="")
+        console.print("\n> Value: ", style="magenta3", end="")
         value = float(input())
 
-        console.print("\n>> Base: ", style="magenta3", end="")
+        console.print("\n> Base: ", style="magenta3", end="")
         base = float(input())
 
         if value <= 0:
@@ -183,7 +181,7 @@ def logarithm():
 
 def factorial():
     try:
-        console.print("\n>> Value: ", style="magenta3", end="")
+        console.print("\n> Value: ", style="magenta3", end="")
         value = int(input())
 
         if value < 0:
@@ -209,7 +207,7 @@ def matrix():
             print("")
 
             if m != n:
-                console.print("\nThe inverse of your matrix does not exist. A matrix must be quadratic to have an inverse.", style="red")
+                console.print("\nThe inverse of your matrix does not exist. A matrix must be quadratic to have an inverse.", style="red1")
                 return None
 
             matrix = []
@@ -217,7 +215,7 @@ def matrix():
             for i in range(m):
                 zeile = list(map(float, input(f"Enter the elements of the {i+1}. line of your matrix with a space between each value: ").split()))
                 if len(zeile) != n:
-                    console.print("\nError, wrong amount of lines. Try again.", style="red")
+                    console.print("\nError, wrong amount of lines. Try again.", style="red1")
                     return None
                 matrix.append(zeile)
 
@@ -253,11 +251,11 @@ def matrix():
             if isinstance(inverse, str):
                 print(inverse)
             else:
-                console.print("\n\nThe inverse of your matrix is: \n", style="yellow")
+                console.print("\n\nThe inverse of your matrix is: \n", style="yellow1")
                 format_matrix(inverse)
 
     except ValueError:
-        console.print("Error, input values must be of the datatype 'float', try again", style="red")
+        console.print("Error, input values must be of the datatype 'float', try again", style="red1")
 
 
     return main()
@@ -279,7 +277,7 @@ def gamma_function():
 
     def faculty():
         try:
-            float_value = float(input("\n\nEnter a float value: "))
+            float_value = float(input("\n\n> Float value: "))
             precision = int(input("Enter how many decimals points you would like to know: "))
             result = factorial_of_float(float_value, precision)
             console.print(f"\nThe factorial of {float_value} is: {result}", style="yellow")
@@ -304,6 +302,7 @@ def help_list():
     text = """
     » [1.] How to use constants like π or e
     » [2.] bla bla bla
+    » [3.] Back
 
     """
 
@@ -326,17 +325,13 @@ def help_list():
     elif choice == 1:
         def typewriter_effect(text, delay=0.025):
             for char in text:
-                console.print(char, style="yellow", end="")
+                console.print(char, style="yellow1", end="")
                 sys.stdout.flush()
                 time.sleep(delay)
-                
-
         console.clear()
-
         console.print("\n----------------------------------------------------", style="purple")
         typewriter_effect(f'\n{constants}\n', 0.01)
         console.print("\n----------------------------------------------------", style="purple")
-
         console.print("Type 'Ok' to go back: ", style="dodger_blue1", end="")
         answer = input()
 
@@ -344,16 +339,23 @@ def help_list():
             console.clear()
             main()
         else:
-            console.print("Sorry, did you mean to type 'ok'? (y/n)", style="dodger_blue1")
-            answer_typo = str(input(""))
+            console.print("Sorry, did you mean to type 'ok'? (y/n)", style="dodger_blue1", end=" ")
+            answer_typo = str(input())
             if answer_typo == "y":
                 console.clear()
                 main()
             else:
-                console.print("fuck you", style="yellow")
+                console.clear()
+                console.print("fuck you", style="yellow1")
+                
+                main()
+
+    elif choice == 3:
+        console.clear()
+        main()
 
     else:
-        console.print("\nError: Invalid input. Try again.", style="red")
+        console.print("\nError: Invalid input. Try again.", style="red1")
         return help_list()
         
 
@@ -362,7 +364,7 @@ def help_list():
 
 def exit():
     console.clear()
-    console.print("\nProcess terminated.", style="red")
+    console.print("\nProcess terminated.", style="red1")
     sys.exit()
 
 
