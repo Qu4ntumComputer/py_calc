@@ -467,11 +467,11 @@ def help_list():
 
 
     console.print("\n>> Enter option: ", style="yellow1", end="")
-    choice = int(input())
+    choice = input()
 
-    if choice == 0:
+    if choice == "0":
         main()
-    elif choice == 1:
+    elif choice == "1":
         def typewriter_effect(text, delay=0.025):
             for char in text:
                 console.print(char, style="yellow1", end="")
@@ -481,9 +481,8 @@ def help_list():
         console.print("\n----------------------------------------------------", style="purple")
         typewriter_effect(f'\n{constants}\n', 0.01)
         console.print("\n----------------------------------------------------", style="purple")
-        console.print("Type 'Ok' to go back: ", style="dodger_blue1", end="")
+        console.print("\nType 'Ok' to go back: ", style="dodger_blue1", end="")
         answer = input()
-
         if answer == "ok" or answer == "Ok":
             console.clear()
             main()
@@ -495,14 +494,11 @@ def help_list():
                 main()
             else:
                 console.clear()
-                console.print("fuck you", style="yellow1")
-                
+                console.print("fuck you", style="yellow1")  
                 main()
-
-    elif choice == 3:
+    elif choice == "3":
         console.clear()
         main()
-
     else:
         console.print("\nError: Invalid input. Try again.", style="red1")
         return help_list()
