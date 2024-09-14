@@ -30,27 +30,38 @@ def format_exponents(expression):
 
 def integral_calc():
     x = sp.symbols('x')
-
+    euler = sp.E 
+    pi = sp.pi 
 
     console.print(f"Input example:  f(x) = 3x² + 4x", style="yellow1")
     console.print("You can also use a ^ sign to symbolize exponents.\n", style="yellow1")
 
-    original_function = input("f(x) = ")
+    console.print("f(x) = ", style="magenta3", end="")
+    original_function = input()
+
 
     function = original_function.replace('^', '**')
-    function = re.sub(r'(\d)([a-zA-Z])', r'\1*\2', function)
+    function = re.sub(r'(\d)([a-zA-Z])', r'\1*\2', function)  
+
+
+    function = function.replace('pi', f'{pi}')
+    function = function.replace('e', f'{euler}')
 
     try:
         math_expr = sp.sympify(function)
         integral = sp.integrate(math_expr, x)
 
+
         integral_syntax = str(integral)
         integral_syntax = format_with_superscript(integral_syntax)
         integral_syntax = replace_multiplication_symbol(integral_syntax)
-        formatted_original = format_exponents(original_function)
 
-        print(f"\nThe undefined integral of f(x) = {formatted_original} is:\n")
-        print(f"f(x) = {integral_syntax} + c\n\n")
+
+        formatted_original = format_exponents(original_function).replace('pi', 'π')
+        integral_syntax = integral_syntax.replace('pi', 'π')
+
+        console.print(f"\nThe undefined integral of f(x) = {formatted_original} is:\n", style="yellow1")
+        console.print(f"f(x) = {integral_syntax} + c\n\n", style="yellow1")
     except Exception as e:
         console.print(f"Error while calculating: {e}", style="red1")
     
@@ -58,14 +69,32 @@ def integral_calc():
 
 def addition():
     try:
-        console.print("\n> First Summand: ", style="magenta3", end="")
-        num1 = float(input())
 
+        console.print("\n> First Summand: ", style="magenta3", end="")
+        num1_input = input()
+
+        if num1_input == "pi":
+            num1 = math.pi
+        elif num1_input == "e":
+            num1 = math.e
+        else:
+            num1 = float(num1_input)
+
+ 
         console.print("> Second Summand: ", style="magenta3", end="")
-        num2 = float(input())
+        num2_input = input()
+
+ 
+        if num2_input == "pi":
+            num2 = math.pi
+        elif num2_input == "e":
+            num2 = math.e
+        else:
+            num2 = float(num1_input)
 
         sum = num1 + num2
         console.print(f'\n\nThe result is: {sum}\n\n', style="yellow1")
+
     except ValueError:
         console.print("Invalid input, try again.", style="red1")
     
@@ -74,10 +103,25 @@ def addition():
 def subtraction():
     try:
         console.print("\n> Minuend: ", style="magenta3", end="")
-        num1 = float(input())
+        num1_input = input()
+
+
+        if num1_input.lower() == "pi":
+            num1 = math.pi
+        elif num1_input.lower() == "e":
+            num1 = math.e
+        else:
+            num1 = float(num1_input)
 
         console.print("> Subtrahend: ", style="magenta3", end="")
-        num2 = float(input())
+        num2_input = input()
+
+        if num2_input.lower() == "pi":
+            num2 = math.pi
+        elif num2_input.lower() == "e":
+            num2 = math.e
+        else:
+            num2 = float(num1_input)
 
         Diff = num1 - num2
         console.print(f'\n\nThe result is: {Diff}\n\n', style="yellow1")
@@ -89,13 +133,30 @@ def subtraction():
 def multiply():
     try:
         console.print("\n> First Factor: ", style="magenta3", end="")
-        num1 = float(input())
+        num1_input = input()
+
+
+        if num1_input.lower() == "pi":
+            num1 = math.pi
+        elif num1_input.lower() == "e":
+            num1 = math.e
+        else:
+            num1 = float(num1_input)
+
 
         console.print("> Second Factor: ", style="magenta3", end="")
-        num2 = float(input())
+        num2_input = input()
 
-        produkt = num1 * num2
-        formatted_result = replace_multiplication_symbol(f"{produkt}")
+
+        if num2_input.lower() == "pi":
+            num2 = math.pi
+        elif num2_input.lower() == "e":
+            num2 = math.e
+        else:
+            num2 = float(num1_input)
+
+        product = num1 * num2
+        formatted_result = replace_multiplication_symbol(f"{product}")
         console.print(f'\n\nThe result is: {formatted_result}\n\n', style="yellow1")
     except ValueError:
         console.print("Invalid input, try again.", style="red1")
@@ -105,11 +166,26 @@ def multiply():
 def division():
     try:
         console.print("\n> Dividend: ", style="magenta3", end="")
-        num1 = float(input())
+        num1_input = input()
+
+        if num1_input.lower() == "pi":
+            num1 = math.pi
+        elif num1_input.lower() == "e":
+            num1 = math.e
+        else:
+            num1 = float(num1_input)
 
         console.print("> Divisor: ", style="magenta3", end="")
-        num2 = float(input())
-        if num2 == 0:
+        num2_input = input()
+
+        if num2_input.lower() == "pi":
+            num2 = math.pi
+        elif num2_input.lower() == "e":
+            num2 = math.e
+        else:
+            num2 = float(num2_input)
+
+        if num2_input == 0:
             console.print("\nUndefined (Error 0 division)\n", style="red1")
         else:
             quotient = num1 / num2
@@ -122,7 +198,15 @@ def division():
 def sqrt():
     try:
         console.print("\n> Value: ", style="magenta3", end="")
-        num1 = float(input())
+        num1_input = input()
+
+        if num1_input.lower() == "pi":
+            num1 = math.pi
+        elif num1_input.lower() == "e":
+            num1 = math.e
+        else:
+            num1 = float(num1_input)
+
 
         squareroot = math.sqrt(num1)
         console.print(f'\n\nThe result is: {squareroot}\n\n', style="yellow1")
@@ -135,10 +219,27 @@ def exponent():
     try:
 
         console.print("\n> Base: ", style="magenta3", end="")
-        base = float(input())
+        base_input = input()
 
-        console.print("\n> Exponent: ", style="magenta3", end="")
-        expo = float(input()) 
+
+        if base_input.lower() == "pi":
+            base = math.pi
+        elif base_input.lower() == "e":
+            base = math.e
+        else:
+            base = float(base_input)
+
+        console.print("> Exponent: ", style="magenta3", end="")
+        expo_input = input() 
+
+
+        if expo_input.lower() == "pi":
+            expo = math.pi
+        elif expo_input.lower() == "e":
+            expo = math.e
+        else:
+            expo = float(expo_input)
+
 
         result = base ** expo
         
@@ -157,10 +258,28 @@ def logarithm():
     try:
 
         console.print("\n> Value: ", style="magenta3", end="")
-        value = float(input())
+        value_input = input()
 
-        console.print("\n> Base: ", style="magenta3", end="")
-        base = float(input())
+
+        if value_input.lower() == "pi":
+            value = math.pi
+        elif value_input.lower() == "e":
+            value = math.e
+        else:
+            value = float(value_input)
+
+
+        console.print("> Base: ", style="magenta3", end="")
+        base_input = input()
+
+
+        if base_input.lower() == "pi":
+            base = math.pi
+        elif base_input.lower() == "e":
+            base = math.e
+        else:
+            base = float(base_input)
+
 
         if value <= 0:
             console.print("Error, logarithm of negative numbers or 0 is not defined.", style="red1")
@@ -183,6 +302,7 @@ def factorial():
         console.print("\n> Value: ", style="magenta3", end="")
         value = int(input())
 
+
         if value < 0:
             console.print("Factorials aren't defined for negatives numbers.", style="red1")
             return factorial()
@@ -199,10 +319,16 @@ def factorial():
     return main()
 
 
+import numpy as np
+from rich.console import Console
+
+console = Console()
+
 def matrix():
     try: 
         def matrix_input():
-            m, n = map(int, input("\n\nEnter the amount of lines and columns of your matrix with a space between each value: ").split())
+            console.print("\n\nEnter the amount of lines and columns of your matrix with a space between each value: ", style="magenta3", end="")
+            m, n = map(int, input().split())
             print("")
 
             if m != n:
@@ -212,7 +338,8 @@ def matrix():
             matrix = []
 
             for i in range(m):
-                zeile = list(map(float, input(f"Enter the elements of the {i+1}. line of your matrix with a space between each value: ").split()))
+                console.print(f"Enter the elements of the {i+1}. line of your matrix with a space between each value: ", style="magenta3", end="")
+                zeile = list(map(float, input().split()))
                 if len(zeile) != n:
                     console.print("\nError, wrong amount of lines. Try again.", style="red1")
                     return None
@@ -244,7 +371,6 @@ def matrix():
         matrix = matrix_input()
 
         if matrix is not None:
-
             inverse = calc_matrix(matrix)
             
             if isinstance(inverse, str):
@@ -254,10 +380,10 @@ def matrix():
                 format_matrix(inverse)
 
     except ValueError:
-        console.print("Error, input values must be of the datatype 'float', try again", style="red1")
-
+        console.print("Invalid input, try again.", style="red1")
 
     return main()
+
 
 
 
@@ -268,24 +394,37 @@ def gamma_function():
         if value.is_integer() and value <= 0:
             raise ValueError("Gamma function is not defined for non-positive integers.")
         
-        mp.dps = precision 
+        mp.dps = precision
 
-        gamma_value = mp.gamma(value + 1)
-        
+        gamma_value = mp.gamma(value + 1) 
+
         return gamma_value
 
     def faculty():
         try:
-            float_value = float(input("\n\n> Float value: "))
-            precision = int(input("Enter how many decimals points you would like to know: "))
-            result = factorial_of_float(float_value, precision)
-            console.print(f"\nThe factorial of {float_value} is: {result}", style="yellow")
-        except ValueError as e:
-            console.print(f"Error: {e}", style="bold red")
 
+            console.print("\n\n> Float value: ", style="magenta3", end="")
+            float_input = input()
+
+            if float_input.lower() == "pi":
+                float_value = math.pi
+            elif float_input.lower() == "e":
+                float_value = math.e
+            else:
+                float_value = float(float_input)
+
+            console.print("> Enter how many decimal points you would like to know: ", style="magenta3", end="")
+            precision = int(input())
+
+            result = factorial_of_float(float_value, precision)
+            console.print(f"\nThe factorial of {float_value} is: \n{result}", style="yellow")
+        
+        except ValueError as e:
+
+            console.print(f"Error: {e}", style="red1")
 
     faculty()
-    
+
     return main()
 
 def help_list():
@@ -294,20 +433,31 @@ def help_list():
 
     def typewriter_effect(text, delay=0.025):
         for char in text:
-            console.print(char, style="yellow", end="")
+            console.print(char, style="yellow1", end="")
             sys.stdout.flush()
             time.sleep(delay)
 
     text = """
     » [1.] How to use constants like π or e
-    » [2.] bla bla bla
-    » [3.] Back
+    » [2.] Not available yet (ran out of ideas...)
+    » [3.] Back 
 
     """
 
     constants = """
-    bla bla bla
-    bla bla bla
+    Mathematical constants are defined. You can use them just
+    by typing the name of the constant. For example:
+
+    [1. Addition]
+
+    First Summand: pi
+    Second Summand: 5
+
+    The result is: 8.141592653589793
+
+
+    As of now only "pi" and "e" are available for the usage
+    of this calculator.
     """
 
 
@@ -359,6 +509,34 @@ def help_list():
         
 
 
+def trigonometry():
+
+    banner = """
+    [1.] Sin
+    [2.] Cos
+    [3.] Tan
+
+    """
+
+    console.print(banner, style="green1")
+
+
+    console.print(">> Select an Operation: ", style="yellow1", end="")
+    operation = int(input())
+
+    if operation == 1:
+        print("sin")
+    elif operation == 2:
+        print("cos")
+    elif operation == 3:
+        print("tan")
+    else: 
+        console.print("Invalid operation, try again.", style="red1")
+
+
+    return main()
+
+
 
 
 def exit():
@@ -397,7 +575,7 @@ def main():
     text.append("[05.]", style="blue1")
     text.append(" Exponent              ", style="green1")
     text.append("[12.]", style="blue1")
-    text.append(" ??\n", style="green1")
+    text.append(" Trigonometry\n", style="green1")
 
     text.append("[06.]", style="blue1")
     text.append(" Squareroot            ", style="green1")
@@ -446,6 +624,8 @@ def main():
         factorial()
     elif operation == "11":
         gamma_function()
+    elif operation== "12":
+        trigonometry()
     else:
         console.print("\nError: Invalid Operation", style="red")
         return main()
