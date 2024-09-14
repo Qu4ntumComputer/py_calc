@@ -33,7 +33,7 @@ def integral_calc():
     euler = sp.E 
     pi = sp.pi 
 
-    console.print(f"Input example:  f(x) = 3x² + 4x", style="yellow1")
+    console.print(f"\nInput example:  f(x) = 3x² + 4x", style="yellow1")
     console.print("You can also use a ^ sign to symbolize exponents.\n", style="yellow1")
 
     console.print("f(x) = ", style="magenta3", end="")
@@ -510,29 +510,64 @@ def help_list():
 
 
 def trigonometry():
-
     banner = """
     [1.] Sin
     [2.] Cos
     [3.] Tan
-
     """
 
     console.print(banner, style="green1")
-
 
     console.print(">> Select an Operation: ", style="yellow1", end="")
     operation = int(input())
 
     if operation == 1:
-        print("sin")
-    elif operation == 2:
-        print("cos")
-    elif operation == 3:
-        print("tan")
-    else: 
-        console.print("Invalid operation, try again.", style="red1")
+        # Sinus Funktion
+        console.print("\n>> sin(x)", style="yellow1")
+        console.print("\n> x = ", style="magenta3", end="")
+        angle_input = input()
 
+        try:
+            # Ersetze 'pi' und 'e' durch sympy Konstanten
+            angle_input = angle_input.replace('pi', '*sp.pi').replace('e', '*sp.E')
+            angle = sp.sympify(angle_input, locals={'sp': sp})  # Verwende Sympy zum Parsen des Ausdrucks
+            result = sp.sin(angle)  # Berechnet den Sinus des eingegebenen Winkels
+            console.print(f"sin({angle}) = {result}\n", style="green1")
+        except Exception as e:
+            console.print(f"Error: {e}", style="red1")
+
+    elif operation == 2:
+        # Cosinus Funktion
+        console.print("\n>> cos(x)", style="yellow1")
+        console.print("\n> x = ", style="magenta3", end="")
+        angle_input = input()
+
+        try:
+            # Ersetze 'pi' und 'e' durch sympy Konstanten
+            angle_input = angle_input.replace('pi', '*sp.pi').replace('e', '*sp.E')
+            angle = sp.sympify(angle_input, locals={'sp': sp})  # Verwende Sympy zum Parsen des Ausdrucks
+            result = sp.cos(angle)  # Berechnet den Cosinus des eingegebenen Winkels
+            console.print(f"cos({angle}) = {result}\n", style="green1")
+        except Exception as e:
+            console.print(f"Error: {e}", style="red1")
+
+    elif operation == 3:
+        # Tangens Funktion
+        console.print("\n>> tan(x)", style="yellow1")
+        console.print("\n> x = ", style="magenta3", end="")
+        angle_input = input()
+
+        try:
+            # Ersetze 'pi' und 'e' durch sympy Konstanten
+            angle_input = angle_input.replace('pi', '*sp.pi').replace('e', '*sp.E')
+            angle = sp.sympify(angle_input, locals={'sp': sp})  # Verwende Sympy zum Parsen des Ausdrucks
+            result = sp.tan(angle)  # Berechnet den Tangens des eingegebenen Winkels
+            console.print(f"tan({angle}) = {result}\n", style="green1")
+        except Exception as e:
+            console.print(f"Error: {e}", style="red1")
+
+    else:
+        console.print("Invalid operation, try again.", style="red1")
 
     return main()
 
