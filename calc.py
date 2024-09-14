@@ -7,6 +7,9 @@ from rich.text import Text
 import numpy as np
 from mpmath import mp
 import time
+import os
+import threading
+from scipy.optimize import fsolve
 
 
 console = Console()
@@ -518,46 +521,46 @@ def trigonometry():
     operation = int(input())
 
     if operation == 1:
-        # Sinus Funktion
+
         console.print("\n>> sin(x)", style="yellow1")
         console.print("\n> x = ", style="magenta3", end="")
         angle_input = input()
 
         try:
-            # Ersetze 'pi' und 'e' durch sympy Konstanten
+            
             angle_input = angle_input.replace('pi', '*sp.pi').replace('e', '*sp.E')
-            angle = sp.sympify(angle_input, locals={'sp': sp})  # Verwende Sympy zum Parsen des Ausdrucks
-            result = sp.sin(angle)  # Berechnet den Sinus des eingegebenen Winkels
+            angle = sp.sympify(angle_input, locals={'sp': sp})  
+            result = sp.sin(angle)  
             console.print(f"sin({angle}) = {result}\n", style="green1")
         except Exception as e:
             console.print(f"Error: {e}", style="red1")
 
     elif operation == 2:
-        # Cosinus Funktion
+        
         console.print("\n>> cos(x)", style="yellow1")
         console.print("\n> x = ", style="magenta3", end="")
         angle_input = input()
 
         try:
-            # Ersetze 'pi' und 'e' durch sympy Konstanten
+            
             angle_input = angle_input.replace('pi', '*sp.pi').replace('e', '*sp.E')
-            angle = sp.sympify(angle_input, locals={'sp': sp})  # Verwende Sympy zum Parsen des Ausdrucks
-            result = sp.cos(angle)  # Berechnet den Cosinus des eingegebenen Winkels
+            angle = sp.sympify(angle_input, locals={'sp': sp})  
+            result = sp.cos(angle)  
             console.print(f"cos({angle}) = {result}\n", style="green1")
         except Exception as e:
             console.print(f"Error: {e}", style="red1")
 
     elif operation == 3:
-        # Tangens Funktion
+        
         console.print("\n>> tan(x)", style="yellow1")
         console.print("\n> x = ", style="magenta3", end="")
         angle_input = input()
 
         try:
-            # Ersetze 'pi' und 'e' durch sympy Konstanten
+            
             angle_input = angle_input.replace('pi', '*sp.pi').replace('e', '*sp.E')
-            angle = sp.sympify(angle_input, locals={'sp': sp})  # Verwende Sympy zum Parsen des Ausdrucks
-            result = sp.tan(angle)  # Berechnet den Tangens des eingegebenen Winkels
+            angle = sp.sympify(angle_input, locals={'sp': sp})  
+            result = sp.tan(angle)  
             console.print(f"tan({angle}) = {result}\n", style="green1")
         except Exception as e:
             console.print(f"Error: {e}", style="red1")
@@ -565,7 +568,129 @@ def trigonometry():
     else:
         console.print("Invalid operation, try again.", style="red1")
 
+    return ()
+
+
+running = True
+
+def change_colors():
+    global running
+    while running:
+        os.system('color 0F') 
+        time.sleep(0.01)
+        os.system('color F0') 
+        time.sleep(0.01)
+
+def get_input():
+    global running
+
+    os.system('color 0F')  
+    while running:
+        answer = input(">> Type 'break' to stop: ").strip().lower()
+        if answer == "break":
+            running = False
+            break
+
+            
+
+def oooooo_Im_blinded_by_the_lightssss():
+    global running
+
+    color_thread = threading.Thread(target=change_colors)
+    color_thread.start()
+
+    get_input()
+
+
+    color_thread.join()
+
+    os.system('color 0F')
+    console.clear()
+    running = True
     return main()
+
+
+def zero_points():
+    console.print("\n> Enter your function: ", style="magenta3", end="")
+    function_str = input()
+    
+    function_str = function_str.replace("^", "**").replace("pi", str(math.pi)).replace("e", str(math.e))
+    
+    function_str = re.sub(r'(\d)(x)', r'\1*\2', function_str)  
+
+    def function(x):
+        return eval(function_str)
+
+    console.print("> Intervall to look for zero points: ", style="magenta3", end="")
+    startvalue_str = input()
+    startvalue = [float(x) for x in startvalue_str.split(",")]
+    
+
+    zero_points = fsolve(function, startvalue)
+    console.print(f"\n\nZero points: {zero_points}", style="yellow1")
+
+    return curve_analysis()
+
+
+
+def curve_analysis():
+
+    text = Text()
+    console = Console()
+
+    text.append("\n----------------------------------------------------", style="red1")
+    text.append("\n               [", style="red1")
+    text.append("0", style="red1")
+    text.append(".]", style="red1")
+    text.append(" Back to main\n", style="red1")
+
+    text.append("\n[", style="blue1")                                                               
+    text.append("1", style="blue1")
+    text.append(".] ", style="blue1")
+    text.append("Zero points", style="green1")
+    text.append("               [", style="blue1")
+    text.append("2", style="blue1")
+    text.append(".] ", style="blue1")
+    text.append("Derivatives", style="green1")
+
+    text.append("\n[", style="blue1")
+    text.append("3", style="blue1")
+    text.append(".] ", style="blue1")
+    text.append("Inflection points", style="green1")
+    text.append("         [", style="blue1")
+    text.append("4", style="blue1")
+    text.append(".] ", style="blue1")
+    text.append("Saddle points", style="green1")
+
+    text.append("\n[", style="blue1")
+    text.append("5", style="blue1")
+    text.append(".] ", style="blue1")
+    text.append("High points", style="green1")
+    text.append("               [", style="blue1")
+    text.append("6", style="blue1")
+    text.append(".] ", style="blue1")
+    text.append("Low points\n", style="green1")
+
+    text.append("\n----------------------------------------------------", style="red1")
+
+    console.print(text)
+
+
+
+
+    console.print("\n>> Select an operation: ", style="yellow1", end="")
+    choice = input()
+
+    if choice == "0":
+        console.clear()
+        return main()
+    elif choice == "1":
+        zero_points()
+    else:
+        console.clear()
+        console.print("\nFunction not defined yet.", style="red1")
+        return curve_analysis()
+    
 
 
 
@@ -581,7 +706,7 @@ def main():
     
     text.append("\n\n----------------------------------------------------\n", style="red1")
     text.append("                   ")
-    text.append("0. Exit\n\n", style="red1")
+    text.append("[0.] Exit\n\n", style="red1")
 
     text.append("[01.]", style="blue1")
     text.append(" Addition              ", style="green1")
@@ -611,7 +736,7 @@ def main():
     text.append("[06.]", style="blue1")
     text.append(" Squareroot            ", style="green1")
     text.append("[13.]", style="blue1")
-    text.append(" ??\n", style="green1")
+    text.append(" Curve analysis\n", style="green1")
 
     text.append("[07.]", style="blue1")
     text.append(" undefined Integrals", style="green1")
@@ -655,10 +780,24 @@ def main():
         factorial()
     elif operation == "11":
         gamma_function()
-    elif operation== "12":
+    elif operation == "12":
         trigonometry()
+    elif operation == "13":
+        console.clear()
+        curve_analysis()
+    elif operation == "secret":
+        oooooo_Im_blinded_by_the_lightssss()
     else:
         console.print("\nError: Invalid Operation", style="red")
         return main()
 
-main()
+if __name__ == "__main__":
+    try:
+        main()
+    except KeyboardInterrupt:
+        console.clear()
+        console.print("\n\nProcess terminated.", style="red1")
+
+
+
+
