@@ -83,7 +83,7 @@ def addition():
         else:
             num1 = float(num1_input)
 
- 
+    
         console.print("> Second Summand: ", style="magenta3", end="")
         num2_input = input()
 
@@ -95,7 +95,10 @@ def addition():
         else:
             num2 = float(num1_input)
 
+
+        console.clear()
         sum = num1 + num2
+        
         console.print(f'\n\nThe result is: {sum}\n\n', style="yellow1")
 
     except ValueError:
@@ -126,6 +129,8 @@ def subtraction():
         else:
             num2 = float(num1_input)
 
+
+        console.clear()
         Diff = num1 - num2
         console.print(f'\n\nThe result is: {Diff}\n\n', style="yellow1")
     except ValueError:
@@ -158,6 +163,8 @@ def multiply():
         else:
             num2 = float(num1_input)
 
+
+        console.clear()
         product = num1 * num2
         formatted_result = replace_multiplication_symbol(f"{product}")
         console.print(f'\n\nThe result is: {formatted_result}\n\n', style="yellow1")
@@ -188,13 +195,14 @@ def division():
         else:
             num2 = float(num2_input)
 
-        if num2_input == 0:
-            console.print("\nUndefined (Error 0 division)\n", style="red1")
-        else:
-            quotient = num1 / num2
-            console.print(f'\n\nThe result is: {quotient}\n\n', style="yellow1")
+        
+        console.clear()
+        quotient = num1 / num2
+        console.print(f'\n\nThe result is: {quotient}\n\n', style="yellow1")
     except ValueError:
         console.print("Invalid input, try again.", style="red1")
+    except ZeroDivisionError:
+        console.print(f'\n\nDivision by zero (undefined).\n\n', style="red1")
     
     return main()
 
@@ -211,6 +219,7 @@ def sqrt():
             num1 = float(num1_input)
 
 
+        console.clear()
         squareroot = math.sqrt(num1)
         console.print(f'\n\nThe result is: {squareroot}\n\n', style="yellow1")
     except ValueError:
@@ -244,6 +253,8 @@ def exponent():
             expo = float(expo_input)
 
 
+
+        console.clear()
         result = base ** expo
         
         if expo.is_integer():
@@ -291,6 +302,9 @@ def logarithm():
         if base == 1:
             console.print("Error, the base of a logarithm can't be equal to 1.", style="red1")
 
+
+        console.clear()
+
         result = math.log(value, base)
 
         console.print(f'\nThe result is: {result}', style="yellow1")
@@ -313,6 +327,7 @@ def factorial():
         for i in range(2, value + 1):
             result *= i
         
+        console.clear()
         console.print(f'\n\nThe result is: {result}', style="yellow1")
 
 
@@ -322,8 +337,6 @@ def factorial():
     return main()
 
 
-import numpy as np
-from rich.console import Console
 
 console = Console()
 
@@ -377,8 +390,10 @@ def matrix():
             inverse = calc_matrix(matrix)
             
             if isinstance(inverse, str):
+                console.clear()
                 print(inverse)
             else:
+                console.clear()
                 console.print("\n\nThe inverse of your matrix is: \n", style="yellow1")
                 format_matrix(inverse)
 
@@ -420,6 +435,9 @@ def gamma_function():
             precision = int(input())
 
             result = factorial_of_float(float_value, precision)
+
+            console.clear()
+
             console.print(f"\nThe factorial of {float_value} is: \n{result}", style="yellow")
         
         except ValueError as e:
@@ -448,8 +466,9 @@ def help_list():
     """
 
     constants = """
-    Mathematical constants are defined. You can use them just
-    by typing the name of the constant. For example:
+    Mathematical constants are defined. You 
+    can use them just by typing the name of 
+    the constant. For example:
 
     [1. Addition]
 
@@ -459,14 +478,14 @@ def help_list():
     The result is: 8.141592653589793
 
 
-    As of now only "pi" and "e" are available for the usage
-    of this calculator.
+    As of now only "pi" and "e" are available 
+    for the usage of this calculator.
     """
 
 
-    console.print("\n----------------------------------------------------", style="purple")
+    console.print("\n----------------------------------------------------", style="red1")
     typewriter_effect(f'\n{text}\n', 0.01)
-    console.print("----------------------------------------------------", style="purple")
+    console.print("----------------------------------------------------", style="red1")
 
 
     console.print("\n>> Enter option: ", style="yellow1", end="")
@@ -481,9 +500,9 @@ def help_list():
                 sys.stdout.flush()
                 time.sleep(delay)
         console.clear()
-        console.print("\n----------------------------------------------------", style="purple")
+        console.print("\n----------------------------------------------------", style="red1")
         typewriter_effect(f'\n{constants}\n', 0.01)
-        console.print("\n----------------------------------------------------", style="purple")
+        console.print("\n----------------------------------------------------", style="red1")
         console.print("\nType 'Ok' to go back: ", style="dodger_blue1", end="")
         answer = input()
         if answer == "ok" or answer == "Ok":
@@ -522,6 +541,8 @@ def trigonometry():
 
     if operation == 1:
 
+        console.clear()
+
         console.print("\n>> sin(x)", style="yellow1")
         console.print("\n> x = ", style="magenta3", end="")
         angle_input = input()
@@ -531,11 +552,17 @@ def trigonometry():
             angle_input = angle_input.replace('pi', '*sp.pi').replace('e', '*sp.E')
             angle = sp.sympify(angle_input, locals={'sp': sp})  
             result = sp.sin(angle)  
+            console.clear()
             console.print(f"sin({angle}) = {result}\n", style="green1")
+
+            return main()
+        
         except Exception as e:
-            console.print(f"Error: {e}", style="red1")
+            console.print(f"Error: Something went wrong. Will be fixed in the future", style="red1")
 
     elif operation == 2:
+
+        console.clear()
         
         console.print("\n>> cos(x)", style="yellow1")
         console.print("\n> x = ", style="magenta3", end="")
@@ -546,11 +573,17 @@ def trigonometry():
             angle_input = angle_input.replace('pi', '*sp.pi').replace('e', '*sp.E')
             angle = sp.sympify(angle_input, locals={'sp': sp})  
             result = sp.cos(angle)  
+            console.clear()
             console.print(f"cos({angle}) = {result}\n", style="green1")
+
+            return main()
+        
         except Exception as e:
-            console.print(f"Error: {e}", style="red1")
+            console.print(f"Error: Something went wrong. Will be fixed in the future", style="red1")
 
     elif operation == 3:
+
+        console.clear()
         
         console.print("\n>> tan(x)", style="yellow1")
         console.print("\n> x = ", style="magenta3", end="")
@@ -561,14 +594,19 @@ def trigonometry():
             angle_input = angle_input.replace('pi', '*sp.pi').replace('e', '*sp.E')
             angle = sp.sympify(angle_input, locals={'sp': sp})  
             result = sp.tan(angle)  
+            console.clear()
             console.print(f"tan({angle}) = {result}\n", style="green1")
+
+            return main()
+
         except Exception as e:
-            console.print(f"Error: {e}", style="red1")
+            console.print(f"Error: Something went wrong. Will be fixed in the future", style="red1")
 
     else:
+        console.clear()
         console.print("Invalid operation, try again.", style="red1")
 
-    return ()
+    return trigonometry()
 
 
 running = True
@@ -627,6 +665,7 @@ def zero_points():
     
 
     zero_points = fsolve(function, startvalue)
+    console.clear()
     console.print(f"\n\nZero points: {zero_points}", style="yellow1")
 
     return curve_analysis()
@@ -640,22 +679,24 @@ def derivatives():
     
     function_str = function_str.replace("^", "**").replace("pi", str(sp.pi)).replace("e", str(sp.E))
     
-    # Automatisches Hinzufügen von '*' zwischen Zahlen und Variablen
+
     function_str = re.sub(r'(\d)(x)', r'\1*\2', function_str)
     function_str = re.sub(r'(\))(\d)', r'\1*\2', function_str)
+
     
     try:
         function = sp.sympify(function_str)
         derivative = sp.diff(function, x)
         
-        # Formatieren der Ableitung, um '*' zwischen Koeffizienten und Variablen zu entfernen
         derivative_str = sp.pretty(derivative, use_unicode=False)
         derivative_str = re.sub(r'(\d)\*(x)', r'\1x', derivative_str)
         
+        console.clear()
         console.print(f"\nThe derivative is: ", style="yellow1", end="")
         print(f'{derivative_str}')
+
     except Exception as e:
-        console.print(f"Error: {e}")
+        console.print(f"Error: Something went wrong. Will be fixed in the future", style="red1")
 
     return curve_analysis()
 
