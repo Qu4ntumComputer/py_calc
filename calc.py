@@ -633,6 +633,66 @@ def zero_points():
 
 
 
+def derivatives():
+    console.print("\n> Enter your function: ", style="magenta3", end="")
+    function_str = input()
+    x = sp.Symbol('x')
+    
+    function_str = function_str.replace("^", "**").replace("pi", str(sp.pi)).replace("e", str(sp.E))
+    
+    # Automatisches Hinzufügen von '*' zwischen Zahlen und Variablen
+    function_str = re.sub(r'(\d)(x)', r'\1*\2', function_str)
+    function_str = re.sub(r'(\))(\d)', r'\1*\2', function_str)
+    
+    try:
+        function = sp.sympify(function_str)
+        derivative = sp.diff(function, x)
+        
+        # Formatieren der Ableitung, um '*' zwischen Koeffizienten und Variablen zu entfernen
+        derivative_str = sp.pretty(derivative, use_unicode=False)
+        derivative_str = re.sub(r'(\d)\*(x)', r'\1x', derivative_str)
+        
+        console.print(f"\nThe derivative is: ", style="yellow1", end="")
+        print(f'{derivative_str}')
+    except Exception as e:
+        console.print(f"Error: {e}")
+
+    return curve_analysis()
+
+
+def inflection_points():
+
+
+    return curve_analysis()
+
+
+
+def saddle_points():
+
+
+
+    return curve_analysis()
+
+
+
+def high_points():
+
+
+
+    return curve_analysis()
+
+
+
+
+def low_points():
+
+
+
+    return curve_analysis()
+
+
+
+
 def curve_analysis():
 
     text = Text()
@@ -686,6 +746,16 @@ def curve_analysis():
         return main()
     elif choice == "1":
         zero_points()
+    elif choice == "2": 
+        derivatives()
+    elif choice == "3":
+        inflection_points()
+    elif choice == "4:":
+        saddle_points()
+    elif choice == "5":
+        high_points()
+    elif choice == "6":
+        low_points()
     else:
         console.clear()
         console.print("\nFunction not defined yet.", style="red1")
