@@ -33,8 +33,8 @@ def format_exponents(expression):
 
 def integral_calc():
     x = sp.symbols('x')
-    euler = sp.E 
-    pi = sp.pi 
+    euler = math.e 
+    pi = math.pi 
 
     console.print(f"\nInput example:  f(x) = 3x² + 4x", style="yellow1")
     console.print("You can also use a ^ sign to symbolize exponents.\n", style="yellow1")
@@ -62,6 +62,8 @@ def integral_calc():
 
         formatted_original = format_exponents(original_function).replace('pi', 'π')
         integral_syntax = integral_syntax.replace('pi', 'π')
+
+        console.clear()
 
         console.print(f"\nThe undefined integral of f(x) = {formatted_original} is:\n", style="yellow1")
         console.print(f"f(x) = {integral_syntax} + c\n\n", style="yellow1")
@@ -536,7 +538,7 @@ def trigonometry():
 
     console.print(banner, style="green1")
 
-    console.print(">> Select an Operation: ", style="yellow1", end="")
+    console.print(">> Select Option: ", style="yellow1", end="")
     operation = int(input())
 
     if operation == 1:
@@ -549,7 +551,9 @@ def trigonometry():
 
         try:
             
-            angle_input = angle_input.replace('pi', '*sp.pi').replace('e', '*sp.E')
+            pi_val = sp.pi
+            e_val = sp.E
+            angle_input = angle_input.replace('pi', f'{pi_val}').replace('e', f'{e_val}')
             angle = sp.sympify(angle_input, locals={'sp': sp})  
             result = sp.sin(angle)  
             console.clear()
@@ -557,7 +561,7 @@ def trigonometry():
 
             return main()
         
-        except Exception as e:
+        except Exception:
             console.print(f"Error: Something went wrong. Will be fixed in the future", style="red1")
 
     elif operation == 2:
@@ -570,7 +574,9 @@ def trigonometry():
 
         try:
             
-            angle_input = angle_input.replace('pi', '*sp.pi').replace('e', '*sp.E')
+            pi_val = sp.pi
+            e_val = sp.E
+            angle_input = angle_input.replace('pi', f'{pi_val}').replace('e', f'{e_val}')
             angle = sp.sympify(angle_input, locals={'sp': sp})  
             result = sp.cos(angle)  
             console.clear()
@@ -591,7 +597,9 @@ def trigonometry():
 
         try:
             
-            angle_input = angle_input.replace('pi', '*sp.pi').replace('e', '*sp.E')
+            pi_val = sp.pi
+            e_val = sp.E
+            angle_input = angle_input.replace('pi', f'{pi_val}').replace('e', f'{e_val}')
             angle = sp.sympify(angle_input, locals={'sp': sp})  
             result = sp.tan(angle)  
             console.clear()
@@ -677,7 +685,7 @@ def derivatives():
     function_str = input()
     x = sp.Symbol('x')
     
-    function_str = function_str.replace("^", "**").replace("pi", str(sp.pi)).replace("e", str(sp.E))
+    function_str = function_str.replace("^", "**").replace("pi", str(math.pi)).replace("e", str(math.e))
     
 
     function_str = re.sub(r'(\d)(x)', r'\1*\2', function_str)
@@ -701,8 +709,46 @@ def derivatives():
     return curve_analysis()
 
 
-def inflection_points():
+def function_edit(funktion):
 
+    funktion = funktion.replace('^', '**')
+    
+    funktion = re.sub(r'(\d)([a-zA-Z])', r'\1*\2', funktion)
+    
+    return funktion
+
+def inflectial_points():
+
+
+    console.print("\n> Enter your function: ", style="magenta3", end="")
+    func_input = input()
+
+    x = sp.symbols('x')
+
+    func_input = function_edit(func_input)
+
+    try:
+        f = sp.sympify(func_input)
+    except sp.SympifyError as e:
+        print(f"Fehler beim Parsen der Funktion: {e}")
+        return None
+
+    f_prime = sp.diff(f, x)
+    f_double_prime = sp.diff(f_prime, x)
+
+    wendepunkt_stellen = sp.solve(f_double_prime, x)
+
+    f_triple_prime = sp.diff(f_double_prime, x)
+
+    wendepunkte = []
+
+    for stelle in wendepunkt_stellen:
+        if f_triple_prime.subs(x, stelle) != 0:
+            y_wert = f.subs(x, stelle)  
+            wendepunkte.append((stelle, y_wert))
+
+    console.clear()
+    console.print(f"The inflection points are: {wendepunkte}", style="yellow1")
 
     return curve_analysis()
 
@@ -710,14 +756,83 @@ def inflection_points():
 
 def saddle_points():
 
+    console.print("\n> Enter your function: ", style="magenta3", end="")
+    function = input()
 
+    x = sp.symbols('x')
+
+    function = function_edit(function)
+
+    try:
+        f = sp.sympify(function)
+    except sp.SympifyError as e:
+        print(f"Fehler beim Parsen der Funktion: {e}")
+        return None
+
+    f_prime = sp.diff(f, x)
+    f_double_prime = sp.diff(f_prime, x)
+
+    candits = sp.solve([f_prime, f_double_prime], x)
+
+    f_triple_prime = sp.diff(f_double_prime, x)
+
+    saddle_pointz = []
+
+    for candit in candits:
+        stelle = candit if isinstance(candit, (int, float, sp.Basic)) else candit[0]
+        
+        if f_triple_prime.subs(x, stelle) != 0:
+            y_val = f.subs(x, stelle)  
+            saddle_pointz.append((stelle, y_val))
+
+    console.clear()
+    console.print(f"The inflection points are: {saddle_pointz}", style="yellow1")
 
     return curve_analysis()
 
 
 
 def high_points():
+    console.print("\n> Enter your function: ", style="magenta3", end="")
+    function = input()
 
+    x = sp.symbols('x')
+
+    function = function_edit(function)
+
+    try:
+        f = sp.sympify(function)
+
+    except sp.SympifyError:
+
+        console.clear()
+        console.print(f"Error: Invalid input, try again.", style="red1")
+
+        return high_points()
+
+
+    f_prime = sp.diff(f, x)
+    f_double_prime = sp.diff(f_prime, x)
+
+
+    candits = sp.solve(f_prime, x)
+
+    high_pointz = []
+
+    for value in candits:
+        if f_double_prime.subs(x, value) < 0:
+            y_val = f.subs(x, value) 
+            high_pointz.append((value, y_val))
+
+
+    console.clear()
+    if high_pointz:
+        console.print(f"The high points are: {high_pointz}", style="yellow1")
+    else:
+        console.clear()
+        console.print("No high points found for the given function.", style="yellow1")
+        
+        return high_points()
 
 
     return curve_analysis()
@@ -726,7 +841,42 @@ def high_points():
 
 
 def low_points():
+    console.print("\n> Enter your function: ", style="magenta3", end="")
+    function = input()
 
+    x = sp.symbols('x')
+
+
+    function = function_edit(function)
+
+    try:
+        f = sp.sympify(function)
+    except sp.SympifyError:
+        print(f"Error: Invalid input, try again.")
+        return None
+
+    f_prime = sp.diff(f, x)
+    f_double_prime = sp.diff(f_prime, x)
+
+
+    candits = sp.solve(f_prime, x)
+
+    low_pointz = []
+
+    for value in candits:
+        if f_double_prime.subs(x, value) > 0:
+            y_wert = f.subs(x, value)
+
+            value_decimal = value.evalf()
+            y_value_decimal = y_wert.evalf()
+            low_pointz.append((value_decimal, y_value_decimal))
+
+
+    console.clear()
+    if low_pointz:
+        console.print(f"The low points are: {low_pointz}", style="yellow1")
+    else:
+        console.print("No low points found for the given function.", style="yellow1")
 
 
     return curve_analysis()
@@ -790,8 +940,8 @@ def curve_analysis():
     elif choice == "2": 
         derivatives()
     elif choice == "3":
-        inflection_points()
-    elif choice == "4:":
+        inflectial_points()
+    elif choice == "4":
         saddle_points()
     elif choice == "5":
         high_points()
@@ -899,6 +1049,7 @@ def main():
     elif operation == "secret":
         oooooo_Im_blinded_by_the_lightssss()
     else:
+        console.clear()
         console.print("\nError: Invalid Operation", style="red")
         return main()
 
