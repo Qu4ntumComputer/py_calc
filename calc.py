@@ -530,91 +530,109 @@ def help_list():
 
 
 def trigonometry():
-    banner = """
-    [1.] Sin
-    [2.] Cos
-    [3.] Tan
-    """
 
-    console.print(banner, style="green1")
+    text = Text()
 
-    console.print(">> Select Option: ", style="yellow1", end="")
-    operation = int(input())
+    while True:
 
-    if operation == 1:
+        text.append("----------------------------------------------------", style="red1")
 
-        console.clear()
+        text.append("\n               [", style="red1")
+        text.append("0", style="red1")
+        text.append(".]", style="red1")
+        text.append(" Back to main\n", style="red1")
 
-        console.print("\n>> sin(x)", style="yellow1")
-        console.print("\n> x = ", style="magenta3", end="")
-        angle_input = input()
+        text.append("\n   [", style="blue1")
+        text.append("1", style="blue1")
+        text.append(".]", style="blue1")
+        text.append(" Sin               ", style="green1")
 
-        try:
-            
-            pi_val = sp.pi
-            e_val = sp.E
-            angle_input = angle_input.replace('pi', f'{pi_val}').replace('e', f'{e_val}')
-            angle = sp.sympify(angle_input, locals={'sp': sp})  
-            result = sp.sin(angle)  
+        text.append("\n   [", style="blue1")
+        text.append("2", style="blue1")
+        text.append(".]", style="blue1")
+        text.append(" Cos               ", style="green1")
+
+        text.append("\n   [", style="blue1")
+        text.append("3", style="blue1")
+        text.append(".]", style="blue1")
+        text.append(" Tan\n", style="green1")
+
+        text.append("\n----------------------------------------------------", style="red1")
+
+        console.print(text)
+
+        console.print("\n>> Select Option: ", style="magenta3", end="")
+
+        operation = input()
+
+
+        if operation == "0":
             console.clear()
-            console.print(f"sin({angle}) = {result}\n", style="green1")
-
-            return main()
-        
-        except Exception:
-            console.print(f"Error: Something went wrong. Will be fixed in the future", style="red1")
-
-    elif operation == 2:
-
-        console.clear()
-        
-        console.print("\n>> cos(x)", style="yellow1")
-        console.print("\n> x = ", style="magenta3", end="")
-        angle_input = input()
-
-        try:
-            
-            pi_val = sp.pi
-            e_val = sp.E
-            angle_input = angle_input.replace('pi', f'{pi_val}').replace('e', f'{e_val}')
-            angle = sp.sympify(angle_input, locals={'sp': sp})  
-            result = sp.cos(angle)  
-            console.clear()
-            console.print(f"cos({angle}) = {result}\n", style="green1")
-
-            return main()
-        
-        except Exception as e:
-            console.print(f"Error: Something went wrong. Will be fixed in the future", style="red1")
-
-    elif operation == 3:
-
-        console.clear()
-        
-        console.print("\n>> tan(x)", style="yellow1")
-        console.print("\n> x = ", style="magenta3", end="")
-        angle_input = input()
-
-        try:
-            
-            pi_val = sp.pi
-            e_val = sp.E
-            angle_input = angle_input.replace('pi', f'{pi_val}').replace('e', f'{e_val}')
-            angle = sp.sympify(angle_input, locals={'sp': sp})  
-            result = sp.tan(angle)  
-            console.clear()
-            console.print(f"tan({angle}) = {result}\n", style="green1")
-
             return main()
 
-        except Exception as e:
-            console.print(f"Error: Something went wrong. Will be fixed in the future", style="red1")
+        elif operation in ["1", "2", "3"]:
 
-    else:
-        console.clear()
-        console.print("Invalid operation, try again.", style="red1")
+            console.clear()
 
-    return trigonometry()
+            console.print("\n----------------------------------------------------\n", style="cyan1")
+            console.print(" [0.] Exit   [1.] Radians   [2.] Degrees", style="cyan")
+            console.print("\n----------------------------------------------------\n", style="cyan1")
+            console.print("\n>> Select Unit: ", style="magenta3", end="")
+            unit = input()
+
+            if unit not in ["1", "2"]: 
+                console.clear()
+                console.print("Invalid selection. Try again.", style="red1")
+                return trigonometry()
+
+            operation_map = {
+                "1": "sin",
+                "2": "cos",
+                "3": "tan"
+            }
+
+            selected_function = operation_map[operation]
+
+            console.clear()
+            console.print(f"\n>> {selected_function}(x)", style="yellow1")
+            console.print("\n> x = ", style="magenta3", end="")
+            angle_input = input()
+
+            try:
+                pi_val = sp.pi
+                e_val = sp.E
+
+
+                angle_input = angle_input.replace('pi', f'{pi_val}').replace('e', f'{e_val}')
+                angle = sp.sympify(angle_input, locals={'sp': sp})
+
+
+                if unit == "2":  
+                    angle = angle * (sp.pi / 180)
+
+
+                if selected_function == "sin":
+                    result = sp.sin(angle)
+                elif selected_function == "cos":
+                    result = sp.cos(angle)
+                elif selected_function == "tan":
+                    result = sp.tan(angle)
+
+                console.clear()
+
+                unit_label = "°" if unit == "2" else ""  
+                console.print(f"{selected_function}({angle_input}{unit_label}) = {result}\n", style="green1")
+
+                return trigonometry()
+
+            except Exception as e:
+                console.print(f"Error: {str(e)}. Will be fixed in the future.", style="red1")
+
+        else:
+            console.print("Invalid selection. Try again.", style="red1")
+
+
+
 
 
 running = True
@@ -730,7 +748,7 @@ def inflectial_points():
     try:
         f = sp.sympify(func_input)
     except sp.SympifyError as e:
-        print(f"Fehler beim Parsen der Funktion: {e}")
+        console.print(f"Error: Invalid input, try again!")
         return None
 
     f_prime = sp.diff(f, x)
@@ -766,7 +784,7 @@ def saddle_points():
     try:
         f = sp.sympify(function)
     except sp.SympifyError as e:
-        print(f"Fehler beim Parsen der Funktion: {e}")
+        console.print(f"Error: Invalid input, try again!")
         return None
 
     f_prime = sp.diff(f, x)
@@ -852,7 +870,7 @@ def low_points():
     try:
         f = sp.sympify(function)
     except sp.SympifyError:
-        print(f"Error: Invalid input, try again.")
+        console.print(f"Error: Invalid input, try again!")
         return None
 
     f_prime = sp.diff(f, x)
@@ -1042,6 +1060,7 @@ def main():
     elif operation == "11":
         gamma_function()
     elif operation == "12":
+        console.clear()
         trigonometry()
     elif operation == "13":
         console.clear()
