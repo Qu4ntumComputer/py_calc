@@ -534,9 +534,7 @@ def trigonometry():
     text = Text()
 
     while True:
-
         text.append("----------------------------------------------------", style="red1")
-
         text.append("\n               [", style="red1")
         text.append("0", style="red1")
         text.append(".]", style="red1")
@@ -565,7 +563,6 @@ def trigonometry():
 
         operation = input()
 
-
         if operation == "0":
             console.clear()
             return main()
@@ -579,6 +576,10 @@ def trigonometry():
             console.print("\n----------------------------------------------------\n", style="cyan1")
             console.print("\n>> Select Unit: ", style="magenta3", end="")
             unit = input()
+
+            if unit == "0":
+                console.clear()
+                return trigonometry()
 
             if unit not in ["1", "2"]: 
                 console.clear()
@@ -602,7 +603,6 @@ def trigonometry():
                 pi_val = sp.pi
                 e_val = sp.E
 
-
                 angle_input = angle_input.replace('pi', f'{pi_val}').replace('e', f'{e_val}')
                 angle = sp.sympify(angle_input, locals={'sp': sp})
 
@@ -610,13 +610,16 @@ def trigonometry():
                 if unit == "2":  
                     angle = angle * (sp.pi / 180)
 
-
                 if selected_function == "sin":
-                    result = sp.sin(angle)
+                    result = sp.sin(angle).evalf()  
                 elif selected_function == "cos":
-                    result = sp.cos(angle)
+                    result = sp.cos(angle).evalf()
                 elif selected_function == "tan":
-                    result = sp.tan(angle)
+
+                    if sp.cos(angle).evalf() == 0:
+                        result = console.print("\nundefined (division by zero)\n", style="red1")
+                    else:
+                        result = sp.tan(angle).evalf()
 
                 console.clear()
 
@@ -626,10 +629,12 @@ def trigonometry():
                 return trigonometry()
 
             except Exception as e:
-                console.print(f"Error: {str(e)}. Will be fixed in the future.", style="red1")
+                console.print(f"Error: Invalid input, try again.", style="red1")
+                return trigonometry()
 
         else:
             console.print("Invalid selection. Try again.", style="red1")
+            return trigonometry()
 
 
 
