@@ -855,7 +855,7 @@ def high_points():
         console.clear()
         console.print("No high points found for the given function.", style="yellow1")
         
-        return high_points()
+        return curve_analysis()
 
 
     return curve_analysis()
