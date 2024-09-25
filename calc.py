@@ -11,9 +11,9 @@ import os
 import threading
 from scipy.optimize import fsolve
 
-
 console = Console()
 console.clear()
+
 
 superscript_map = str.maketrans("0123456789", "⁰¹²³⁴⁵⁶⁷⁸⁹")
 
@@ -31,424 +31,57 @@ def format_exponents(expression):
     return re.sub(r'\^(\d+)', lambda match: to_superscript(match.group(1)), expression)
 
 
-def integral_calc():
-    x = sp.symbols('x')
-    euler = math.e 
-    pi = math.pi 
+translations_en = {
+    "exit": "Exit\n\n",
+    "addition": "Addition              ",
+    "logarithm": "Logarithm\n",
+    "subtraction": "Subtraction           ",
+    "inverse_matrix": "Inverse Matrix\n",
+    "multiplication": "Multiplication        ",
+    "factorial": "Factorial\n",
+    "division": "Division              ",
+    "gamma_function": "Gamma function\n",
+    "exponent": " Exponent              ",
+    "trigonometry": " Trigonometry\n",
+    "sqrt": "Squareroot            ",
+    "curve_analysis": "Curve analysis\n",
+    "integral": "Undefined Integrals   ",
+    "settings": " Settings\n",
+    "help": "\n               Type !h for help.",
+    "select_operation": ">> Select an Operation: ",
+    "error_invalid": "\nError: Invalid Operation",
+    "process_terminated": "\n\nProcess terminated.",
+    "change_language": "Change Language:",
+    "language_changed": "Language has been changed to English."
+}
+
+translations_de = {
+    "exit": "Beenden\n\n",
+    "addition": "Addition              ",
+    "logarithm": "Logarithmus\n",
+    "subtraction": "Subtraktion           ",
+    "inverse_matrix": "Inverse Matrix\n",
+    "multiplication": "Multiplikation        ",
+    "factorial": "Fakultät\n",
+    "division": "Division              ",
+    "gamma_function": "Gamma-Funktion\n",
+    "exponent": " Exponent              ",
+    "trigonometry": " Trigonometrie\n",
+    "sqrt": "Quadratwurzel         ",
+    "curve_analysis": "Kurvenanalyse\n",
+    "integral": "Unbestimmte Integrale ",
+    "settings": " Einstellungen\n",
+    "help": "\n               Tippe !h für Hilfe.",
+    "select_operation": ">> Wähle eine Operation: ",
+    "error_invalid": "\nFehler: Ungültige Operation",
+    "process_terminated": "\n\nProzess beendet.",
+    "change_language": "Sprache ändern:",
+    "language_changed": "Sprache wurde auf Deutsch umgestellt."
+}
+
+
+current_language = translations_en
 
-    console.print(f"\nInput example:  f(x) = 3x² + 4x", style="yellow1")
-    console.print("You can also use a ^ sign to symbolize exponents.\n", style="yellow1")
-
-    console.print("f(x) = ", style="magenta3", end="")
-    original_function = input()
-
-
-    function = original_function.replace('^', '**')
-    function = re.sub(r'(\d)([a-zA-Z])', r'\1*\2', function)  
-
-
-    function = function.replace('pi', f'{pi}')
-    function = function.replace('e', f'{euler}')
-
-    try:
-        math_expr = sp.sympify(function)
-        integral = sp.integrate(math_expr, x)
-
-
-        integral_syntax = str(integral)
-        integral_syntax = format_with_superscript(integral_syntax)
-        integral_syntax = replace_multiplication_symbol(integral_syntax)
-
-
-        formatted_original = format_exponents(original_function).replace('pi', 'π')
-        integral_syntax = integral_syntax.replace('pi', 'π')
-
-        console.clear()
-
-        console.print(f"\nThe undefined integral of f(x) = {formatted_original} is:\n", style="yellow1")
-        console.print(f"f(x) = {integral_syntax} + c\n\n", style="yellow1")
-    except Exception as e:
-        console.print(f"Error while calculating: {e}", style="red1")
-    
-    return main()
-
-def addition():
-    try:
-
-        console.print("\n> First Summand: ", style="magenta3", end="")
-        num1_input = input()
-
-        if num1_input == "pi":
-            num1 = math.pi
-        elif num1_input == "e":
-            num1 = math.e
-        else:
-            num1 = float(num1_input)
-
-    
-        console.print("> Second Summand: ", style="magenta3", end="")
-        num2_input = input()
-
- 
-        if num2_input == "pi":
-            num2 = math.pi
-        elif num2_input == "e":
-            num2 = math.e
-        else:
-            num2 = float(num1_input)
-
-
-        console.clear()
-        sum = num1 + num2
-        
-        console.print(f'\n\nThe result is: {sum}\n\n', style="yellow1")
-
-    except ValueError:
-        console.print("Invalid input, try again.", style="red1")
-    
-    return main()
-
-def subtraction():
-    try:
-        console.print("\n> Minuend: ", style="magenta3", end="")
-        num1_input = input()
-
-
-        if num1_input.lower() == "pi":
-            num1 = math.pi
-        elif num1_input.lower() == "e":
-            num1 = math.e
-        else:
-            num1 = float(num1_input)
-
-        console.print("> Subtrahend: ", style="magenta3", end="")
-        num2_input = input()
-
-        if num2_input.lower() == "pi":
-            num2 = math.pi
-        elif num2_input.lower() == "e":
-            num2 = math.e
-        else:
-            num2 = float(num1_input)
-
-
-        console.clear()
-        Diff = num1 - num2
-        console.print(f'\n\nThe result is: {Diff}\n\n', style="yellow1")
-    except ValueError:
-        console.print("Invalid input, try again.", style="red1")
-    
-    return main()
-
-def multiply():
-    try:
-        console.print("\n> First Factor: ", style="magenta3", end="")
-        num1_input = input()
-
-
-        if num1_input.lower() == "pi":
-            num1 = math.pi
-        elif num1_input.lower() == "e":
-            num1 = math.e
-        else:
-            num1 = float(num1_input)
-
-
-        console.print("> Second Factor: ", style="magenta3", end="")
-        num2_input = input()
-
-
-        if num2_input.lower() == "pi":
-            num2 = math.pi
-        elif num2_input.lower() == "e":
-            num2 = math.e
-        else:
-            num2 = float(num1_input)
-
-
-        console.clear()
-        product = num1 * num2
-        formatted_result = replace_multiplication_symbol(f"{product}")
-        console.print(f'\n\nThe result is: {formatted_result}\n\n', style="yellow1")
-    except ValueError:
-        console.print("Invalid input, try again.", style="red1")
-    
-    return main()
-
-def division():
-    try:
-        console.print("\n> Dividend: ", style="magenta3", end="")
-        num1_input = input()
-
-        if num1_input.lower() == "pi":
-            num1 = math.pi
-        elif num1_input.lower() == "e":
-            num1 = math.e
-        else:
-            num1 = float(num1_input)
-
-        console.print("> Divisor: ", style="magenta3", end="")
-        num2_input = input()
-
-        if num2_input.lower() == "pi":
-            num2 = math.pi
-        elif num2_input.lower() == "e":
-            num2 = math.e
-        else:
-            num2 = float(num2_input)
-
-        
-        console.clear()
-        quotient = num1 / num2
-        console.print(f'\n\nThe result is: {quotient}\n\n', style="yellow1")
-    except ValueError:
-        console.print("Invalid input, try again.", style="red1")
-    except ZeroDivisionError:
-        console.print(f'\n\nDivision by zero (undefined).\n\n', style="red1")
-    
-    return main()
-
-def sqrt():
-    try:
-        console.print("\n> Value: ", style="magenta3", end="")
-        num1_input = input()
-
-        if num1_input.lower() == "pi":
-            num1 = math.pi
-        elif num1_input.lower() == "e":
-            num1 = math.e
-        else:
-            num1 = float(num1_input)
-
-
-        console.clear()
-        squareroot = math.sqrt(num1)
-        console.print(f'\n\nThe result is: {squareroot}\n\n', style="yellow1")
-    except ValueError:
-        console.print("Invalid input, try again.", style="red1")
-    
-    return main()
-
-def exponent():
-    try:
-
-        console.print("\n> Base: ", style="magenta3", end="")
-        base_input = input()
-
-
-        if base_input.lower() == "pi":
-            base = math.pi
-        elif base_input.lower() == "e":
-            base = math.e
-        else:
-            base = float(base_input)
-
-        console.print("> Exponent: ", style="magenta3", end="")
-        expo_input = input() 
-
-
-        if expo_input.lower() == "pi":
-            expo = math.pi
-        elif expo_input.lower() == "e":
-            expo = math.e
-        else:
-            expo = float(expo_input)
-
-
-
-        console.clear()
-        result = base ** expo
-        
-        if expo.is_integer():
-            formatted_result = f"{base}{to_superscript(int(expo))} is {result}"
-        else:
-            formatted_result = f"{base}^{expo} = {result}"
-        console.print(f'\n\nThe result of {formatted_result}\n\n', style="yellow1")
-    except ValueError:
-        console.print("Invalid input, try again.", style="red1")
-    
-    return main()
-
-
-def logarithm():
-    try:
-
-        console.print("\n> Value: ", style="magenta3", end="")
-        value_input = input()
-
-
-        if value_input.lower() == "pi":
-            value = math.pi
-        elif value_input.lower() == "e":
-            value = math.e
-        else:
-            value = float(value_input)
-
-
-        console.print("> Base: ", style="magenta3", end="")
-        base_input = input()
-
-
-        if base_input.lower() == "pi":
-            base = math.pi
-        elif base_input.lower() == "e":
-            base = math.e
-        else:
-            base = float(base_input)
-
-
-        if value <= 0:
-            console.print("Error, logarithm of negative numbers or 0 is not defined.", style="red1")
-        if base <= 0:
-            console.print("Error, the base of a logarithm can't be equal or less than 0.", style="red1")
-        if base == 1:
-            console.print("Error, the base of a logarithm can't be equal to 1.", style="red1")
-
-
-        console.clear()
-
-        result = math.log(value, base)
-
-        console.print(f'\nThe result is: {result}', style="yellow1")
-
-    except ValueError:
-        console.print("Invalid input, try again.", style="red1")
-
-    return main()
-
-def factorial():
-    try:
-        console.print("\n> Value: ", style="magenta3", end="")
-        value = int(input())
-
-
-        if value < 0:
-            console.print("Factorials aren't defined for negatives numbers.", style="red1")
-            return factorial()
-        result = 1
-        for i in range(2, value + 1):
-            result *= i
-        
-        console.clear()
-        console.print(f'\n\nThe result is: {result}', style="yellow1")
-
-
-    except ValueError:
-        console.print("Error, this function only accepts integer values. Use gamma function for non-integer factorials.", style="red1")
-
-    return main()
-
-
-
-console = Console()
-
-def matrix():
-    try: 
-        def matrix_input():
-            console.print("\n\nEnter the amount of lines and columns of your matrix with a space between each value: ", style="magenta3", end="")
-            m, n = map(int, input().split())
-            print("")
-
-            if m != n:
-                console.print("\nThe inverse of your matrix does not exist. A matrix must be quadratic to have an inverse.", style="red1")
-                return None
-
-            matrix = []
-
-            for i in range(m):
-                console.print(f"Enter the elements of the {i+1}. line of your matrix with a space between each value: ", style="magenta3", end="")
-                zeile = list(map(float, input().split()))
-                if len(zeile) != n:
-                    console.print("\nError, wrong amount of lines. Try again.", style="red1")
-                    return None
-                matrix.append(zeile)
-
-            return np.array(matrix)
-
-        def calc_matrix(matrix):
-            try:
-                inverse = np.linalg.inv(matrix)
-                return inverse
-            except np.linalg.LinAlgError:
-                return matrix_input
-
-        def format_matrix(matrix):
-            m, n = matrix.shape
-            for i, line in enumerate(matrix):
-                if i == 0:
-                    print("⌈", end="")
-                    print(" ".join(f"{val:6.2f}" for val in line), end="")
-                    print(" ⌉")
-                elif i == m - 1:
-                    print("⌊", end="")
-                    print(" ".join(f"{val:6.2f}" for val in line), end="")
-                    print(" ⌋")
-                else:
-                    print(" " + " ".join(f"{val:6.2f}" for val in line))
-
-        matrix = matrix_input()
-
-        if matrix is not None:
-            inverse = calc_matrix(matrix)
-            
-            if isinstance(inverse, str):
-                console.clear()
-                print(inverse)
-            else:
-                console.clear()
-                console.print("\n\nThe inverse of your matrix is: \n", style="yellow1")
-                format_matrix(inverse)
-
-    except ValueError:
-        console.print("Invalid input, try again.", style="red1")
-
-    return main()
-
-
-
-
-
-def gamma_function():
-
-    def factorial_of_float(value, precision=50):
-        if value.is_integer() and value <= 0:
-            raise ValueError("Gamma function is not defined for non-positive integers.")
-        
-        mp.dps = precision
-
-        gamma_value = mp.gamma(value + 1) 
-
-        return gamma_value
-
-    def faculty():
-        try:
-
-            console.print("\n\n> Float value: ", style="magenta3", end="")
-            float_input = input()
-
-            if float_input.lower() == "pi":
-                float_value = math.pi
-            elif float_input.lower() == "e":
-                float_value = math.e
-            else:
-                float_value = float(float_input)
-
-            console.print("> Enter how many decimal points you would like to know: ", style="magenta3", end="")
-            precision = int(input())
-
-            result = factorial_of_float(float_value, precision)
-
-            console.clear()
-
-            console.print(f"\nThe factorial of {float_value} is: \n{result}", style="yellow")
-        
-        except ValueError as e:
-
-            console.print(f"Error: {e}", style="red1")
-
-    faculty()
-
-    return main()
 
 def help_list():
 
@@ -526,7 +159,597 @@ def help_list():
     else:
         console.print("\nError: Invalid input. Try again.", style="red1")
         return help_list()
+
+
+def change_colors():
+    global running
+    while running:
+        os.system('color 0F') 
+        time.sleep(0.01)
+        os.system('color F0') 
+        time.sleep(0.01)
+
+def get_input():
+    global running
+
+    os.system('color 0F')  
+    while running:
+        answer = input(">> Type 'break' to stop: ").strip().lower()
+        if answer == "break":
+            running = False
+            break
+
+
+
+def oooooo_Im_blinded_by_the_lightssss():
+    global running
+
+    color_thread = threading.Thread(target=change_colors)
+    color_thread.start()
+
+    get_input()
+
+
+    color_thread.join()
+
+    os.system('color 0F')
+    console.clear()
+    running = True
+    return main()
+
+
+
+color_theme = """
+Feature available in the future.
+"""
+
+
+def settings():
+
+    global current_language
+
+    console.clear()
+
+    text = Text()
+
+    text.append("\n----------------------------------------------------", style="red1")
+    text.append("\n               [", style="red1")
+    text.append("0", style="red1")
+    text.append(".]", style="red1")
+    text.append(" Back to main\n", style="red1")
+
+    text.append("\n[", style="blue1")                                                               
+    text.append("1", style="blue1")
+    text.append(".] ", style="blue1")
+    text.append("Language", style="green1")
+    text.append("                  [", style="blue1")
+    text.append("2", style="blue1")
+    text.append(".] ", style="blue1")
+    text.append("Color Theme", style="green1")
+
+
+    text.append("\n\n----------------------------------------------------\n", style="red1")
+
+
+    console.print(text)
+
+    console.print("\n>> Select an option: ", style="yellow1", end="")
+    option = int(input())
+
+    if option == 0:
+        console.clear()
+        return main()
+    elif option == 1:
+        console.clear()
+
+        lang_selection = Text()
+
+        lang_selection.append("\n----------------------------------------------------", style="red1")
+        lang_selection.append("\n               [", style="red1")
+        lang_selection.append("0", style="red1")
+        lang_selection.append(".]", style="red1")
+        lang_selection.append(" Back to main\n", style="red1")
+
+        lang_selection.append("\n[", style="blue1")                                                               
+        lang_selection.append("1", style="blue1")
+        lang_selection.append(".] ", style="blue1")
+        lang_selection.append("English (US)", style="green1")
+        lang_selection.append("                  [", style="blue1")
+        lang_selection.append("2", style="blue1")
+        lang_selection.append(".] ", style="blue1")
+        lang_selection.append("German (GER)", style="green1")
+        lang_selection.append("\n\n----------------------------------------------------", style="red1")
+
+
+
+        console.print(lang_selection)
+
+        console.print("\n>> Select an option: ", style="red1", end="")
+        select_opt = int(input())
+
+
+
+        if select_opt == 0:
+            console.clear()
+            return settings()
         
+        elif select_opt == 1:
+
+            console.clear()
+
+            current_language = translations_en
+            console.print(current_language["language_changed"], style="green1")
+
+            return main()
+        
+        elif select_opt == 2:
+
+            console.clear()
+
+            current_language = translations_de
+            console.print(current_language["language_changed"], style="green1")
+
+            return main()
+        
+
+
+    elif option == 2:
+
+        console.clear()
+
+
+
+        console.print(color_theme, style="red1")
+        return main()
+
+    else:
+        console.clear()
+        console.print("Invalid option, try again.")
+        return settings()
+
+
+
+def addition():
+    try:
+
+        console.print("\n> First Summand: ", style="magenta3", end="")
+        num1_input = input()
+
+        if num1_input == "pi":
+            num1 = math.pi
+        elif num1_input == "e":
+            num1 = math.e
+        else:
+            num1 = float(num1_input)
+
+    
+        console.print("> Second Summand: ", style="magenta3", end="")
+        num2_input = input()
+
+ 
+        if num2_input == "pi":
+            num2 = math.pi
+        elif num2_input == "e":
+            num2 = math.e
+        else:
+            num2 = float(num1_input)
+
+
+        console.clear()
+        sum = num1 + num2
+        
+        console.print(f'\n\nThe result is: {sum}\n\n', style="yellow1")
+
+    except ValueError:
+        console.print("Invalid input, try again.", style="red1")
+    
+    return main()
+
+
+
+def subtraction():
+    try:
+        console.print("\n> Minuend: ", style="magenta3", end="")
+        num1_input = input()
+
+
+        if num1_input.lower() == "pi":
+            num1 = math.pi
+        elif num1_input.lower() == "e":
+            num1 = math.e
+        else:
+            num1 = float(num1_input)
+
+        console.print("> Subtrahend: ", style="magenta3", end="")
+        num2_input = input()
+
+        if num2_input.lower() == "pi":
+            num2 = math.pi
+        elif num2_input.lower() == "e":
+            num2 = math.e
+        else:
+            num2 = float(num1_input)
+
+
+        console.clear()
+        Diff = num1 - num2
+        console.print(f'\n\nThe result is: {Diff}\n\n', style="yellow1")
+    except ValueError:
+        console.print("Invalid input, try again.", style="red1")
+    
+    return main()
+
+
+
+def multiply():
+    try:
+        console.print("\n> First Factor: ", style="magenta3", end="")
+        num1_input = input()
+
+
+        if num1_input.lower() == "pi":
+            num1 = math.pi
+        elif num1_input.lower() == "e":
+            num1 = math.e
+        else:
+            num1 = float(num1_input)
+
+
+        console.print("> Second Factor: ", style="magenta3", end="")
+        num2_input = input()
+
+
+        if num2_input.lower() == "pi":
+            num2 = math.pi
+        elif num2_input.lower() == "e":
+            num2 = math.e
+        else:
+            num2 = float(num1_input)
+
+
+        console.clear()
+        product = num1 * num2
+        formatted_result = replace_multiplication_symbol(f"{product}")
+        console.print(f'\n\nThe result is: {formatted_result}\n\n', style="yellow1")
+    except ValueError:
+        console.print("Invalid input, try again.", style="red1")
+    
+    return main()
+
+
+
+
+def division():
+    try:
+        console.print("\n> Dividend: ", style="magenta3", end="")
+        num1_input = input()
+
+        if num1_input.lower() == "pi":
+            num1 = math.pi
+        elif num1_input.lower() == "e":
+            num1 = math.e
+        else:
+            num1 = float(num1_input)
+
+        console.print("> Divisor: ", style="magenta3", end="")
+        num2_input = input()
+
+        if num2_input.lower() == "pi":
+            num2 = math.pi
+        elif num2_input.lower() == "e":
+            num2 = math.e
+        else:
+            num2 = float(num2_input)
+
+        
+        console.clear()
+        quotient = num1 / num2
+        console.print(f'\n\nThe result is: {quotient}\n\n', style="yellow1")
+    except ValueError:
+        console.print("Invalid input, try again.", style="red1")
+    except ZeroDivisionError:
+        console.print(f'\n\nDivision by zero (undefined).\n\n', style="red1")
+    
+    return main()
+
+
+
+
+
+def exponent():
+    try:
+
+        console.print("\n> Base: ", style="magenta3", end="")
+        base_input = input()
+
+
+        if base_input.lower() == "pi":
+            base = math.pi
+        elif base_input.lower() == "e":
+            base = math.e
+        else:
+            base = float(base_input)
+
+        console.print("> Exponent: ", style="magenta3", end="")
+        expo_input = input() 
+
+
+        if expo_input.lower() == "pi":
+            expo = math.pi
+        elif expo_input.lower() == "e":
+            expo = math.e
+        else:
+            expo = float(expo_input)
+
+
+
+        console.clear()
+        result = base ** expo
+        
+        if expo.is_integer():
+            formatted_result = f"{base}{to_superscript(int(expo))} is {result}"
+        else:
+            formatted_result = f"{base}^{expo} = {result}"
+        console.print(f'\n\nThe result of {formatted_result}\n\n', style="yellow1")
+    except ValueError:
+        console.print("Invalid input, try again.", style="red1")
+    
+    return main()
+
+
+
+def sqrt():
+    try:
+        console.print("\n> Value: ", style="magenta3", end="")
+        num1_input = input()
+
+        if num1_input.lower() == "pi":
+            num1 = math.pi
+        elif num1_input.lower() == "e":
+            num1 = math.e
+        else:
+            num1 = float(num1_input)
+
+
+        console.clear()
+        squareroot = math.sqrt(num1)
+        console.print(f'\n\nThe result is: {squareroot}\n\n', style="yellow1")
+    except ValueError:
+        console.print("Invalid input, try again.", style="red1")
+    
+    return main()
+
+
+
+def integral_calc():
+    x = sp.symbols('x')
+    euler = math.e 
+    pi = math.pi 
+
+    console.print(f"\nInput example:  f(x) = 3x² + 4x", style="yellow1")
+    console.print("You can also use a ^ sign to symbolize exponents.\n", style="yellow1")
+
+    console.print("f(x) = ", style="magenta3", end="")
+    original_function = input()
+
+
+    function = original_function.replace('^', '**')
+    function = re.sub(r'(\d)([a-zA-Z])', r'\1*\2', function)  
+
+
+    function = function.replace('pi', f'{pi}')
+    function = function.replace('e', f'{euler}')
+
+    try:
+        math_expr = sp.sympify(function)
+        integral = sp.integrate(math_expr, x)
+
+
+        integral_syntax = str(integral)
+        integral_syntax = format_with_superscript(integral_syntax)
+        integral_syntax = replace_multiplication_symbol(integral_syntax)
+
+
+        formatted_original = format_exponents(original_function).replace('pi', 'π')
+        integral_syntax = integral_syntax.replace('pi', 'π')
+
+        console.clear()
+
+        console.print(f"\nThe undefined integral of f(x) = {formatted_original} is:\n", style="yellow1")
+        console.print(f"f(x) = {integral_syntax} + c\n\n", style="yellow1")
+    except Exception as e:
+        console.print(f"Error while calculating: {e}", style="red1")
+    
+    return main()
+
+def logarithm():
+    try:
+
+        console.print("\n> Value: ", style="magenta3", end="")
+        value_input = input()
+
+
+        if value_input.lower() == "pi":
+            value = math.pi
+        elif value_input.lower() == "e":
+            value = math.e
+        else:
+            value = float(value_input)
+
+
+        console.print("> Base: ", style="magenta3", end="")
+        base_input = input()
+
+
+        if base_input.lower() == "pi":
+            base = math.pi
+        elif base_input.lower() == "e":
+            base = math.e
+        else:
+            base = float(base_input)
+
+
+        if value <= 0:
+            console.print("Error, logarithm of negative numbers or 0 is not defined.", style="red1")
+        if base <= 0:
+            console.print("Error, the base of a logarithm can't be equal or less than 0.", style="red1")
+        if base == 1:
+            console.print("Error, the base of a logarithm can't be equal to 1.", style="red1")
+
+
+        console.clear()
+
+        result = math.log(value, base)
+
+        console.print(f'\nThe result is: {result}', style="yellow1")
+
+    except ValueError:
+        console.print("Invalid input, try again.", style="red1")
+
+    return main()
+
+
+
+def matrix():
+    try: 
+        def matrix_input():
+            console.print("\n\nEnter the amount of lines and columns of your matrix with a space between each value: ", style="magenta3", end="")
+            m, n = map(int, input().split())
+            print("")
+
+            if m != n:
+                console.print("\nThe inverse of your matrix does not exist. A matrix must be quadratic to have an inverse.", style="red1")
+                return None
+
+            matrix = []
+
+            for i in range(m):
+                console.print(f"Enter the elements of the {i+1}. line of your matrix with a space between each value: ", style="magenta3", end="")
+                zeile = list(map(float, input().split()))
+                if len(zeile) != n:
+                    console.print("\nError, wrong amount of lines. Try again.", style="red1")
+                    return None
+                matrix.append(zeile)
+
+            return np.array(matrix)
+
+        def calc_matrix(matrix):
+            try:
+                inverse = np.linalg.inv(matrix)
+                return inverse
+            except np.linalg.LinAlgError:
+                return matrix_input
+
+        def format_matrix(matrix):
+            m, n = matrix.shape
+            for i, line in enumerate(matrix):
+                if i == 0:
+                    print("⌈", end="")
+                    print(" ".join(f"{val:6.2f}" for val in line), end="")
+                    print(" ⌉")
+                elif i == m - 1:
+                    print("⌊", end="")
+                    print(" ".join(f"{val:6.2f}" for val in line), end="")
+                    print(" ⌋")
+                else:
+                    print(" " + " ".join(f"{val:6.2f}" for val in line))
+
+        matrix = matrix_input()
+
+        if matrix is not None:
+            inverse = calc_matrix(matrix)
+            
+            if isinstance(inverse, str):
+                console.clear()
+                print(inverse)
+            else:
+                console.clear()
+                console.print("\n\nThe inverse of your matrix is: \n", style="yellow1")
+                format_matrix(inverse)
+
+    except ValueError:
+        console.print("Invalid input, try again.", style="red1")
+
+    return main()
+
+
+def function_edit(funktion):
+
+    funktion = funktion.replace('^', '**')
+    
+    funktion = re.sub(r'(\d)([a-zA-Z])', r'\1*\2', funktion)
+    
+    return funktion
+
+
+def factorial():
+    try:
+        console.print("\n> Value: ", style="magenta3", end="")
+        value = int(input())
+
+
+        if value < 0:
+            console.print("Factorials aren't defined for negatives numbers.", style="red1")
+            return factorial()
+        result = 1
+        for i in range(2, value + 1):
+            result *= i
+        
+        console.clear()
+        console.print(f'\n\nThe result is: {result}', style="yellow1")
+
+
+    except ValueError:
+        console.print("Error, this function only accepts integer values. Use gamma function for non-integer factorials.", style="red1")
+
+    return main()
+
+
+
+
+def gamma_function():
+
+    def factorial_of_float(value, precision=50):
+        if value.is_integer() and value <= 0:
+            raise ValueError("Gamma function is not defined for non-positive integers.")
+        
+        mp.dps = precision
+
+        gamma_value = mp.gamma(value + 1) 
+
+        return gamma_value
+
+    def faculty():
+        try:
+
+            console.print("\n\n> Float value: ", style="magenta3", end="")
+            float_input = input()
+
+            if float_input.lower() == "pi":
+                float_value = math.pi
+            elif float_input.lower() == "e":
+                float_value = math.e
+            else:
+                float_value = float(float_input)
+
+            console.print("> Enter how many decimal points you would like to know: ", style="magenta3", end="")
+            precision = int(input())
+
+            result = factorial_of_float(float_value, precision)
+
+            console.clear()
+
+            console.print(f"\nThe factorial of {float_value} is: \n{result}", style="yellow")
+        
+        except ValueError as e:
+
+            console.print(f"Error: {e}", style="red1")
+
+    faculty()
+
+    return main()
+
+
 
 
 def trigonometry():
@@ -583,7 +806,7 @@ def trigonometry():
 
             if unit not in ["1", "2"]: 
                 console.clear()
-                console.print("Invalid selection. Try again.", style="red1")
+                console.print("\nInvalid selection. Try again.", style="red1")
                 return trigonometry()
 
             operation_map = {
@@ -629,54 +852,13 @@ def trigonometry():
                 return trigonometry()
 
             except Exception as e:
-                console.print(f"Error: Invalid input, try again.", style="red1")
+                console.clear()
+                console.print(f"\nError: Invalid input, try again.\n", style="red1")
                 return trigonometry()
 
         else:
             console.print("Invalid selection. Try again.", style="red1")
             return trigonometry()
-
-
-
-
-
-running = True
-
-def change_colors():
-    global running
-    while running:
-        os.system('color 0F') 
-        time.sleep(0.01)
-        os.system('color F0') 
-        time.sleep(0.01)
-
-def get_input():
-    global running
-
-    os.system('color 0F')  
-    while running:
-        answer = input(">> Type 'break' to stop: ").strip().lower()
-        if answer == "break":
-            running = False
-            break
-
-            
-
-def oooooo_Im_blinded_by_the_lightssss():
-    global running
-
-    color_thread = threading.Thread(target=change_colors)
-    color_thread.start()
-
-    get_input()
-
-
-    color_thread.join()
-
-    os.system('color 0F')
-    console.clear()
-    running = True
-    return main()
 
 
 def zero_points():
@@ -732,13 +914,55 @@ def derivatives():
     return curve_analysis()
 
 
-def function_edit(funktion):
 
-    funktion = funktion.replace('^', '**')
-    
-    funktion = re.sub(r'(\d)([a-zA-Z])', r'\1*\2', funktion)
-    
-    return funktion
+
+def low_points():
+    console.print("\n> Enter your function: ", style="magenta3", end="")
+    function = input()
+
+    x = sp.symbols('x')
+
+
+    function = function_edit(function)
+
+    try:
+        f = sp.sympify(function)
+    except sp.SympifyError:
+        console.print(f"Error: Invalid input, try again!")
+        return None
+
+    f_prime = sp.diff(f, x)
+    f_double_prime = sp.diff(f_prime, x)
+
+
+    candits = sp.solve(f_prime, x)
+
+    low_pointz = []
+
+    for value in candits:
+        if f_double_prime.subs(x, value) > 0:
+            y_wert = f.subs(x, value)
+
+            value_decimal = value.evalf()
+            y_value_decimal = y_wert.evalf()
+            low_pointz.append((value_decimal, y_value_decimal))
+
+
+    console.clear()
+    if low_pointz:
+        console.print(f"The low points are: {low_pointz}", style="yellow1")
+    else:
+        console.print("No low points found for the given function.", style="yellow1")
+
+
+    return curve_analysis()
+
+
+
+
+
+
+
 
 def inflectial_points():
 
@@ -815,6 +1039,8 @@ def saddle_points():
 
 
 
+
+
 def high_points():
     console.print("\n> Enter your function: ", style="magenta3", end="")
     function = input()
@@ -860,49 +1086,6 @@ def high_points():
 
     return curve_analysis()
 
-
-
-
-def low_points():
-    console.print("\n> Enter your function: ", style="magenta3", end="")
-    function = input()
-
-    x = sp.symbols('x')
-
-
-    function = function_edit(function)
-
-    try:
-        f = sp.sympify(function)
-    except sp.SympifyError:
-        console.print(f"Error: Invalid input, try again!")
-        return None
-
-    f_prime = sp.diff(f, x)
-    f_double_prime = sp.diff(f_prime, x)
-
-
-    candits = sp.solve(f_prime, x)
-
-    low_pointz = []
-
-    for value in candits:
-        if f_double_prime.subs(x, value) > 0:
-            y_wert = f.subs(x, value)
-
-            value_decimal = value.evalf()
-            y_value_decimal = y_wert.evalf()
-            low_pointz.append((value_decimal, y_value_decimal))
-
-
-    console.clear()
-    if low_pointz:
-        console.print(f"The low points are: {low_pointz}", style="yellow1")
-    else:
-        console.print("No low points found for the given function.", style="yellow1")
-
-
-    return curve_analysis()
 
 
 
@@ -974,15 +1157,8 @@ def curve_analysis():
         console.clear()
         console.print("\nFunction not defined yet.", style="red1")
         return curve_analysis()
-    
 
 
-
-
-def exit():
-    console.clear()
-    console.print("\nProcess terminated.", style="red1")
-    sys.exit()
 
 
 def main():
@@ -990,52 +1166,50 @@ def main():
     
     text.append("\n\n----------------------------------------------------\n", style="red1")
     text.append("                   ")
-    text.append("[0.] Exit\n\n", style="red1")
+    text.append(f'[0.] {current_language["exit"]}\n', style="red1")
 
     text.append("[01.]", style="blue1")
-    text.append(" Addition              ", style="green1")
+    text.append(f" {current_language['addition']}", style="green1")
     text.append("[08.]", style="blue1")
-    text.append(" Logarithm\n", style="green1")
+    text.append(f" {current_language['logarithm']}", style="green1")
 
     text.append("[02.]", style="blue1")
-    text.append(" Subtraction           ", style="green1")
+    text.append(f" {current_language['subtraction']}", style="green1")
     text.append("[09.]", style="blue1")
-    text.append(" Inverse Matrix\n", style="green1")
+    text.append(f" {current_language['inverse_matrix']}", style="green1")
 
     text.append("[03.]", style="blue1")
-    text.append(" Multiplication        ", style="green1")
+    text.append(f" {current_language['multiplication']}", style="green1")
     text.append("[10.]", style="blue1")
-    text.append(" Factorial\n", style="green1")
+    text.append(f" {current_language['factorial']}", style="green1")
 
     text.append("[04.]", style="blue1")
-    text.append(" Division              ", style="green1")
+    text.append(f" {current_language['division']}", style="green1")
     text.append("[11.]", style="blue1")
-    text.append(" Gamma function\n", style="green1")
+    text.append(f" {current_language['gamma_function']}", style="green1")
 
     text.append("[05.]", style="blue1")
-    text.append(" Exponent              ", style="green1")
+    text.append(f"{current_language['exponent']}", style="green1")
     text.append("[12.]", style="blue1")
-    text.append(" Trigonometry\n", style="green1")
+    text.append(f"{current_language['trigonometry']}", style="green1")
 
     text.append("[06.]", style="blue1")
-    text.append(" Squareroot            ", style="green1")
+    text.append(f" {current_language['sqrt']}", style="green1")
     text.append("[13.]", style="blue1")
-    text.append(" Curve analysis\n", style="green1")
+    text.append(f" {current_language['curve_analysis']}", style="green1")
 
     text.append("[07.]", style="blue1")
-    text.append(" undefined Integrals", style="green1")
-    text.append("   [14.]", style="blue1")
-    text.append(" ??\n", style="green1")
-    text.append("\n               Type !h for help.", style="yellow1")
+    text.append(f" {current_language['integral']}", style="green1")
+    text.append("[14.]", style="blue1")
+    text.append(f"{current_language['settings']}\n", style="green1")
+    text.append(f"\n               {current_language['help']}", style="yellow1")
 
     text.append("\n----------------------------------------------------\n", style="red1")
 
     console.print(text)
 
-
-    console.print(">> Select an Operation: ", style="yellow1", end="")
+    console.print(current_language["select_operation"], style="yellow1", end="")
     operation = input()
-
 
     if operation == "0":
         exit()
@@ -1070,20 +1244,26 @@ def main():
     elif operation == "13":
         console.clear()
         curve_analysis()
+    elif operation == "14":
+        console.clear()
+        settings()
     elif operation == "secret":
         oooooo_Im_blinded_by_the_lightssss()
+    elif operation.lower() == "config":
+        console.clear()
+        settings()
     else:
         console.clear()
         console.print("\nError: Invalid Operation", style="red")
         return main()
+
+
+
+
 
 if __name__ == "__main__":
     try:
         main()
     except KeyboardInterrupt:
         console.clear()
-        console.print("\n\nProcess terminated.", style="red1")
-
-
-
-
+        console.print(current_language["process_terminated"], style="red1")
