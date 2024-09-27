@@ -20,12 +20,15 @@ superscript_map = str.maketrans("0123456789", "⁰¹²³⁴⁵⁶⁷⁸⁹")
 def to_superscript(exp):
     return str(exp).translate(superscript_map)
 
+
 def format_with_superscript(expression):
     expression = re.sub(r'\*\*(\d+)', lambda match: to_superscript(match.group(1)), expression)
     return expression
 
+
 def replace_multiplication_symbol(expression):
     return expression.replace('*', '⋅')
+
 
 def format_exponents(expression):
     return re.sub(r'\^(\d+)', lambda match: to_superscript(match.group(1)), expression)
@@ -52,8 +55,24 @@ translations_en = {
     "error_invalid": "\nError: Invalid Operation",
     "process_terminated": "\n\nProcess terminated.",
     "change_language": "Change Language:",
-    "language_changed": "Language has been changed to English."
+    "language_changed": "Language has been changed to English.",
+    "value": "Value",
+    "base": "Base:",
+    "first": "First",
+    "summand": "Summand",
+    "second": "Second",
+    "the": "The",
+    "result": "result",
+    "is": "is",
+    "invalid": "Invalid",
+    "input": "input",
+    "try": "try",
+    "again": "again",
+
+
 }
+
+
 
 translations_de = {
     "exit": "Beenden\n\n",
@@ -76,7 +95,21 @@ translations_de = {
     "error_invalid": "\nFehler: Ungültige Operation",
     "process_terminated": "\n\nProzess beendet.",
     "change_language": "Sprache ändern:",
-    "language_changed": "Sprache wurde auf Deutsch umgestellt."
+    "language_changed": "Sprache wurde auf Deutsch umgestellt.",
+    "value": "Wert",
+    "base": "Basis",
+    "first": "Erster",
+    "summand": "Summand",
+    "second": "Zweiter",
+    "the": "Das",
+    "result": "Ergebnis",
+    "is": "ist",
+    "invalid": "Ungültige",
+    "input": "Eingabe",
+    "try": "versuch's",
+    "again": "nochmal",
+
+
 }
 
 
@@ -95,7 +128,7 @@ def help_list():
 
     text = """
     » [1.] How to use constants like π or e
-    » [2.] Not available yet (ran out of ideas...)
+    » [2.] How to change language
     » [3.] Back 
 
     """
@@ -116,6 +149,20 @@ def help_list():
     As of now only "pi" and "e" are available 
     for the usage of this calculator.
     """
+
+    language = """
+    The calculator supports 2 main 
+    languages at the moment. Those being
+    English (US) and German (GER).
+
+    If you want to change the current
+    language, simply return to the main menu
+    and select operation [14.] (Settings)
+    and select option 'Language' to choose
+    your prefered language.
+
+    """
+
 
 
     console.print("\n----------------------------------------------------", style="red1")
@@ -146,13 +193,45 @@ def help_list():
         else:
             console.print("Sorry, did you mean to type 'ok'? (y/n)", style="dodger_blue1", end=" ")
             answer_typo = str(input())
+
             if answer_typo == "y":
                 console.clear()
                 main()
+
             else:
                 console.clear()
                 console.print("fuck you", style="yellow1")  
                 main()
+
+    elif choice == "2":
+        def typewriter_effect(text, delay=0.025):
+            for char in text:
+                console.print(char, style="yellow1", end="")
+                sys.stdout.flush()
+                time.sleep(delay)
+        console.clear()
+        console.print("\n----------------------------------------------------", style="red1")
+        typewriter_effect(f'\n{language}\n', 0.01)
+        console.print("\n----------------------------------------------------", style="red1")
+        console.print("\nType 'Ok' to go back: ", style="dodger_blue1", end="")
+        answer = input()
+
+        if answer == "ok" or answer == "Ok":
+            console.clear()
+            main()
+        else:
+            console.print("Sorry, did you mean to type 'ok'? (y/n)", style="dodger_blue1", end=" ")
+            answer_typo = str(input())
+
+            if answer_typo == "y":
+                console.clear()
+                main()
+
+            else:
+                console.clear()
+                console.print("fuck you", style="yellow1")  
+                main()
+
     elif choice == "3":
         console.clear()
         main()
@@ -312,7 +391,7 @@ def settings():
 def addition():
     try:
 
-        console.print("\n> First Summand: ", style="magenta3", end="")
+        console.print(f"\n> {current_language['First'.lower()]} {current_language['summand'.lower()]}: ", style="magenta3", end="")
         num1_input = input()
 
         if num1_input == "pi":
@@ -323,7 +402,7 @@ def addition():
             num1 = float(num1_input)
 
     
-        console.print("> Second Summand: ", style="magenta3", end="")
+        console.print(f"> {current_language['Second'.lower()]} {current_language['Summand'.lower()]}: ", style="magenta3", end="")
         num2_input = input()
 
  
@@ -337,11 +416,17 @@ def addition():
 
         console.clear()
         sum = num1 + num2
-        
-        console.print(f'\n\nThe result is: {sum}\n\n', style="yellow1")
 
+        console.print(f"\n\n{current_language['The'.lower()]} {current_language['result'.lower()]} {current_language['is'.lower()]}: {sum}\n\n", style="yellow1")
+
+        
     except ValueError:
-        console.print("Invalid input, try again.", style="red1")
+        console.clear()
+        console.print(f"{current_language['Invalid'.lower()]} {current_language['input'.lower()]}, {current_language['Try'.lower()]} {current_language['again'.lower()]}.", style="red1")
+
+        
+
+ 
     
     return main()
 
@@ -561,6 +646,7 @@ def integral_calc():
         console.print(f"Error while calculating: {e}", style="red1")
     
     return main()
+
 
 def logarithm():
     try:
